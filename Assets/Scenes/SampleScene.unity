@@ -169,8 +169,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _jumpForce: 50
-  _movementSpeed: 5
-  _movementStepsInUnits: 2.5
+  _movementSpeed: 1
+  _movementStepsInUnits: 1
   _animator: {fileID: 1250801173}
 --- !u!54 &503194494
 Rigidbody:
@@ -242,56 +242,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 68017e90-15cc-478b-86a0-f968a8c6e9a3
-    m_ActionName: PlayerControls/Movement[/Keyboard/w,/Keyboard/a,/Keyboard/s,/Keyboard/d]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 503194493}
-        m_TargetAssemblyTypeName: FG.PlayerController, Assembly-CSharp
-        m_MethodName: OnMovement
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 73759393-9d8f-4a5d-8386-b4e041add25b
-    m_ActionName: PlayerControls/MoveDown[/Keyboard/s]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 503194493}
-        m_TargetAssemblyTypeName: FG.PlayerController, Assembly-CSharp
-        m_MethodName: OnMovement
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 0bd3f63a-b448-43aa-9654-95c51646c064
-    m_ActionName: PlayerControls/MoveLeft[/Keyboard/a]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 503194493}
-        m_TargetAssemblyTypeName: FG.PlayerController, Assembly-CSharp
-        m_MethodName: OnMovement
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: c53b1b38-aaa0-4e52-bb51-860e910e4bc7
-    m_ActionName: PlayerControls/MoveRight[/Keyboard/d]
+    m_ActionId: a52a7ccd-118b-427b-9cb3-5b28e6c104d8
+    m_ActionName: PlayerControls/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerControls
