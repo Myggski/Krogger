@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public float frequency = 2f;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public bool active;
+    
 }
