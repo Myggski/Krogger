@@ -5,18 +5,17 @@ using UnityEngine.Serialization;
 
 public class RiverFlowAnimation : MonoBehaviour
 {
-    [FormerlySerializedAs("scrollY")]
     [Header("Flow Speed")]
-    [SerializeField] public float flowSpeed = 0.5f;
+    public float flowSpeed = 0.5f;
 
     private Material _material;
     
-    void Start()
+    private void Awake()
     {
         _material = GetComponent<Renderer>().material;
     }
     
-    void Update()
+    private void Update()
     {
         float offsetY = Time.time * flowSpeed;
 

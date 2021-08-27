@@ -9,7 +9,7 @@ public class Obstacle : MonoBehaviour
     
     private Rigidbody _rb;
     
-    void Start()
+    private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         _rb.AddForce(transform.forward * _speed);
