@@ -9,8 +9,7 @@ public class RoadTrack : MonoBehaviour
     [SerializeField] private SpawnPoint[] _spawnPoints;
 
     [SerializeField] private GameObject[] _carPool;
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         foreach (var spawnPoint in _spawnPoints)
         {
@@ -18,7 +17,7 @@ public class RoadTrack : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnCar(SpawnPoint spawnPoint, float frequency)
+    private IEnumerator SpawnCar(SpawnPoint spawnPoint, float frequency)
     {
         Transform spawnTransform = spawnPoint.transform;
         while (spawnPoint.active)
@@ -27,11 +26,5 @@ public class RoadTrack : MonoBehaviour
             
             Instantiate(_carPool[Random.Range(0, _carPool.Length)], spawnTransform.position, spawnTransform.rotation);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
