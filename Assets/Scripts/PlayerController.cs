@@ -4,119 +4,110 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace FG {
-	[RequireComponent(typeof(Rigidbody))]
 	public class PlayerController : MonoBehaviour {
-		[SerializeField]
-		public float _jumpForce = 50.0f;
+		[Header("Movement")]
 		[SerializeField]
 		private float _movementSpeed = 5.0f;
 		[SerializeField]
 		private float _movementStepsInUnits = 1f;
+
+		[Header("Animation")]
+		[SerializeField] 
+		private string _jumpAnimationTriggerName = "Jump";
 		[SerializeField]
 		private Animator _animator;
-
-		[SerializeField] private FloatEvent _jumpEvent;
-
-		private bool _jumping = false;
-		private Vector3 _nextDirection;
-		private float _rotationAngle = 0f;
-
-		private List<string> _keysPressed;
+		
+		private float _rotationAngle;
 		private List<Vector3> _queuedMovements;
 		private Vector3 _currentPosition;
-		private Rigidbody _body;
-		
-		private Vector3 NextDirection => _queuedMovements.Any() ? _queuedMovements[0] : Vector3.zero;
+
+		private bool HasQueuedMovements => _queuedMovements.Any();
+		private bool HasSpotsLeftInMovementQueue => _queuedMovements.Count < 2;
+		private Vector3 NextDirection => HasQueuedMovements ? _queuedMovements[0] : Vector3.zero;
+		private Vector3 LastDirection => HasQueuedMovements ? _queuedMovements[_queuedMovements.Count - 1] : Vector3.zero;
 
 		/// <summary>
 		/// Gets called with UnityEvents by Input System
 		/// </summary>
-		/// <param name="value"></param>
+		/// <param name="value">The input value, what button, what state on the button and so on</param>
 		public void OnMovement(InputAction.CallbackContext value) {
 			if (value.phase == InputActionPhase.Started) {
 				QueueNewDirection(value.control.displayName);
 			}
 		}
 
-		private void QueueNewDirection(string keyPressed) {
-			_nextDirection = InputHelper.GetMovingDirectionByKey(keyPressed);
-
-			if (_queuedMovements.Any() && _queuedMovements.Count < 3) {
-				_queuedMovements.Add(_queuedMovements[_queuedMovements.Count - 1] + _nextDirection * _movementStepsInUnits);
-			}
-			else {
-				_queuedMovements.Add( new Vector3(_currentPosition.x, transform.position.y, _currentPosition.z) +
-				                      (_nextDirection * _movementStepsInUnits));
-				
-				_rotationAngle = Quaternion.Angle(transform.rotation,
-					Quaternion.LookRotation((NextDirection - transform.position).normalized));
-			}
-		}
-
 		/// <summary>
-		/// Resets jump, moving direction and such before moving again
+		/// Queues movement directions for movements smoothness
 		/// </summary>
-		private void ResetMovementInfo() {
-			_jumping = false;
-			_currentPosition = transform.position;
+		/// <param name="keyPressed"></param>
+		private void QueueNewDirection(string keyPressed) {
+			Vector3 nextDirection = InputHelper.GetMovingDirectionByKey(keyPressed);
 
-			if (_queuedMovements.Count > 0) {
-				_rotationAngle = Quaternion.Angle(transform.rotation,
-					Quaternion.LookRotation((NextDirection - transform.position).normalized));
+			if (HasQueuedMovements && HasSpotsLeftInMovementQueue) {
+				_queuedMovements.Add(LastDirection + nextDirection * _movementStepsInUnits);
+			}
+			else if (!HasQueuedMovements) {
+				Vector3 currentPosition = new Vector3(_currentPosition.x, transform.position.y, _currentPosition.z);
+				_queuedMovements.Add(currentPosition + (nextDirection * _movementStepsInUnits));
+
+				SetupNewMovement();
 			}
 		}
 		
 		/// <summary>
-		/// Set jump animation and adds jump force
+		/// Sets the speed of the animation and recalculate the new angle to rotate
 		/// </summary>
-		private void TryToJump() {
-			if (_jumping) {
-				return;
+		private void SetupNewMovement() {
+			_rotationAngle = Quaternion.Angle(transform.rotation,
+				Quaternion.LookRotation((NextDirection - transform.position).normalized));
+
+			if (_animator) {
+				_animator.speed = (_movementSpeed * _queuedMovements.Count) / _movementStepsInUnits;
+				_animator.SetTrigger(_jumpAnimationTriggerName);
 			}
-
-			_jumping = true;
-			_jumpEvent.Invoke(_movementSpeed / _movementStepsInUnits);
-
-			_body.AddForce(0, _jumpForce, 0, ForceMode.Force);
-			_animator.SetTrigger("Jump");
+			else {
+				Debug.LogWarning("There's no animation attached of Krister jumping.");
+			}
 		}
 
 		/// <summary>
-		/// Moves and rotates the player to new position
+		/// Reset the current position, and recalculate the angle between the current position and the new position
 		/// </summary>
-		/// <param name="nextPosition"></param>
-		private void MoveAndRotate() { ;
-			TryToJump();
-			
+		private void ResetMovementInfo() {
+			_queuedMovements.RemoveAt(0);
+			_currentPosition = transform.position;
+
+			if (HasQueuedMovements) {
+				SetupNewMovement();
+			}
+		}
+
+		/// <summary>
+		/// Rotate Krister in sync with movement, the rotation should be done same time as movement
+		/// </summary>
+		private void MoveAndRotate() {
 			transform.position = Vector3.MoveTowards(transform.position, NextDirection, (_movementSpeed * _queuedMovements.Count) * Time.deltaTime);
 			transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation((NextDirection - _currentPosition).normalized), Time.deltaTime * (_rotationAngle / (1 / _movementSpeed * _movementStepsInUnits)));
 
 			if (transform.position == NextDirection) {
-				_queuedMovements.RemoveAt(0);
 				ResetMovementInfo();
 			}
 		}
 
 		/// <summary>
-		/// Sets rigidbody, current position and animationspeed
+		/// Setup list and default value of _currentPosition
 		/// </summary>
 		private void Setup() {
-			_body = GetComponent<Rigidbody>();
-			_currentPosition = transform.position;
-			_animator.speed = _movementSpeed / _movementStepsInUnits;
 			_queuedMovements = new List<Vector3>();
-			_keysPressed = new List<string>();
+			_currentPosition = transform.position;
 		}
 
 		/// <summary>
-		/// Check if there are movement, and move if it's true
+		/// Move and rotate Krister if there's any queued movements
 		/// </summary>
 		private void CheckForMovement() {
-			if (_queuedMovements.Count > 0) {
+			if (HasQueuedMovements) {
 				MoveAndRotate();
-			}
-			else {
-				ResetMovementInfo();
 			}
 		}
 		
