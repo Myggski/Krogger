@@ -32,17 +32,16 @@ namespace FG {
 		/// <param name="value">The input value, what button, what state on the button and so on</param>
 		public void OnMovement(InputAction.CallbackContext value) {
 			if (value.phase == InputActionPhase.Started) {
-				QueueNewDirection(value.control.displayName);
+				Vector2 inputDirection = value.ReadValue<Vector2>();
+				QueueNewDirection(new Vector3(inputDirection.x, 0, inputDirection.y));
 			}
 		}
 
 		/// <summary>
 		/// Queues movement directions for movements smoothness
 		/// </summary>
-		/// <param name="keyPressed"></param>
-		private void QueueNewDirection(string keyPressed) {
-			Vector3 nextDirection = keyPressed.GetMovingDirectionByKey();
-
+		/// <param name="nextDirection"></param>
+		private void QueueNewDirection(Vector3 nextDirection) {
 			if (HasQueuedMovements && HasSpotsLeftInMovementQueue) {
 				_queuedMovements.Add(LastDirection + nextDirection * _movementStepsInUnits);
 			}
