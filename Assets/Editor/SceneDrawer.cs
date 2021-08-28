@@ -28,6 +28,7 @@ namespace FG {
                 EditorGUI.LabelField (position, label.text, "Use [Scene] with strings.");
             }
         }
+
         protected SceneAsset GetSceneObject(string sceneObjectName) {
             if (string.IsNullOrEmpty(sceneObjectName)) {
                 return null;
