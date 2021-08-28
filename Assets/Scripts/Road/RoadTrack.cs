@@ -8,23 +8,39 @@ public class RoadTrack : MonoBehaviour
 {
     [SerializeField] private SpawnPoint[] _spawnPoints;
 
-    [SerializeField] private GameObject[] _carPool;
+    [SerializeField] private GameObject[] _obstaclePool;
+
+    [Range(0, 1.5f)]
+    public float spawnDeviation = 1f;
+    
     private void Start()
     {
         foreach (var spawnPoint in _spawnPoints)
         {
-            StartCoroutine(SpawnCar(spawnPoint, spawnPoint.frequency));
+            StartCoroutine(SpawnObstacle(spawnPoint, spawnPoint.frequency));
         }
     }
 
-    private IEnumerator SpawnCar(SpawnPoint spawnPoint, float frequency)
+    /// <summary>
+    /// Coroutine that continually spawns obstacles.
+    /// Uses spawnDeviation to add variance to spawn frequency
+    /// </summary>
+    /// <param name="spawnPoint">The transform used to instantiate the spawned obstacle</param> 
+    /// <param name="frequency">Frequency of spawns in seconds</param> 
+    /// <returns></returns>
+    private IEnumerator SpawnObstacle(SpawnPoint spawnPoint, float frequency)
     {
+        var deviation = Random.Range(-spawnDeviation, spawnDeviation);
+        if (frequency + deviation < 0) deviation = 0;
+        
         Transform spawnTransform = spawnPoint.transform;
+        
+        // The reason we don't use Transform as a parameter is because of this bool:
         while (spawnPoint.active)
         {
-            yield return new WaitForSeconds(frequency);
+            yield return new WaitForSeconds(frequency + deviation);
             
-            Instantiate(_carPool[Random.Range(0, _carPool.Length)], spawnTransform.position, spawnTransform.rotation);
+            Instantiate(_obstaclePool[Random.Range(0, _obstaclePool.Length)], spawnTransform.position, spawnTransform.rotation);
         }
     }
 }
