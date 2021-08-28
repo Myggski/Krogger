@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -13,5 +14,14 @@ public class Obstacle : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _rb.AddForce(transform.forward * _speed);
+    }
+
+    private void Update()
+    {
+        var zPos = transform.position.z;
+        if (zPos >= 40 || zPos <= -40)
+        {
+            Destroy(gameObject);
+        }
     }
 }

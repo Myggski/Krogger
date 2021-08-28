@@ -7,24 +7,18 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] 
     private GameObject[] trackPieces;
 
-    private Vector3 spawnPosition = new Vector3(0, 0, 0);
+    private Vector3 _spawnPosition = new Vector3(0, 0, 0);
 
-    private GameObject lastTrackPiece;
+    private GameObject _lastTrackPiece;
+    private GameObject _currentTrackPiece;
 
 
-    void Start()
+    private void Start()
     {
-        lastTrackPiece = trackPieces[0];
-        Instantiate(lastTrackPiece, spawnPosition, Quaternion.identity);
-        spawnPosition.x += lastTrackPiece.transform.localScale.x / 2;
+        _lastTrackPiece = trackPieces[0];
+        Instantiate(_lastTrackPiece, _spawnPosition, Quaternion.identity);
 
         StartCoroutine(SpawnTracks(2f));
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private IEnumerator SpawnTracks(float frequency)
@@ -37,14 +31,13 @@ public class LevelGenerator : MonoBehaviour
 
     }
 
-    void SpawnNextTrackPiece()
+    private void SpawnNextTrackPiece()
     {
-        print("spawn pos: " + spawnPosition);
-        print("localScale.x: " + lastTrackPiece.transform.localScale.x);
         int trackIndex = Random.Range(0, trackPieces.Length);
-        lastTrackPiece = trackPieces[trackIndex];
-        Instantiate(lastTrackPiece, spawnPosition, Quaternion.identity);
-        spawnPosition.x += lastTrackPiece.transform.localScale.x / 2;
-        
+        _currentTrackPiece = trackPieces[trackIndex];
+        _spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
+        Instantiate(_currentTrackPiece, _spawnPosition, Quaternion.identity);
+
+        _lastTrackPiece = _currentTrackPiece;
     }
 }
