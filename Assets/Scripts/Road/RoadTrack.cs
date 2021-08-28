@@ -8,7 +8,7 @@ public class RoadTrack : MonoBehaviour
 {
     [SerializeField] private SpawnPoint[] _spawnPoints;
 
-    [SerializeField] private GameObject[] _carPool;
+    [SerializeField] private GameObject[] _obstaclePool;
     private void Start()
     {
         foreach (var spawnPoint in _spawnPoints)
@@ -24,7 +24,7 @@ public class RoadTrack : MonoBehaviour
         {
             yield return new WaitForSeconds(frequency);
             
-            Instantiate(_carPool[Random.Range(0, _carPool.Length)], spawnTransform.position, spawnTransform.rotation);
+            Instantiate(_obstaclePool[Random.Range(0, _obstaclePool.Length)], spawnTransform.position, spawnTransform.rotation);
         }
     }
 }
