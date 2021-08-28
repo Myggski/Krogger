@@ -240,6 +240,7 @@ MonoBehaviour:
   - {fileID: 481955004533875057}
   _obstaclePool:
   - {fileID: 121994793929710636, guid: ca5fe185fa4f2b1468ea3c491279a5e1, type: 3}
+  spawnDeviation: 0.96
 --- !u!1 &7999790315298229768
 GameObject:
   m_ObjectHideFlags: 0

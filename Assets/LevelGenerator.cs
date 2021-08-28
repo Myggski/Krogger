@@ -18,7 +18,12 @@ public class LevelGenerator : MonoBehaviour
         _lastTrackPiece = trackPieces[0];
         Instantiate(_lastTrackPiece, _spawnPosition, Quaternion.identity);
 
-        StartCoroutine(SpawnTracks(2f));
+        for (int i = 0; i < 20; i++)
+        {
+            SpawnNextTrackPiece();
+        }
+ 
+        //StartCoroutine(SpawnTracks(2f));
     }
 
     private IEnumerator SpawnTracks(float frequency)
