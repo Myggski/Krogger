@@ -178,6 +178,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: RiverTrack
       objectReference: {fileID: 0}
+    - target: {fileID: 6548649006229760707, guid: 1816ce519e9dd2b43aefa74524909e8f, type: 3}
+      propertyPath: _carPool.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6548649006229760707, guid: 1816ce519e9dd2b43aefa74524909e8f, type: 3}
+      propertyPath: _carPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 4822504028821433057, guid: a68942ddc7f23ab4bba50cb061401317, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1816ce519e9dd2b43aefa74524909e8f, type: 3}
 --- !u!1 &449893090
@@ -270,6 +278,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4432812377019737652, guid: 777c9baadf3c9694588b0a3a3663fbce, type: 3}
+      propertyPath: _carPool.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4432812377019737652, guid: 777c9baadf3c9694588b0a3a3663fbce, type: 3}
+      propertyPath: _carPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 4822504028821433057, guid: a68942ddc7f23ab4bba50cb061401317, type: 3}
     - target: {fileID: 4432812377019737654, guid: 777c9baadf3c9694588b0a3a3663fbce, type: 3}
       propertyPath: m_Name
       value: RoadTrack
