@@ -1,0 +1,68 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="Highscore.uss" />
+    <ui:VisualElement name="root" class="root">
+        <ui:VisualElement name="content-wrapper" class="content-wrapper">
+            <ui:Label text="High Scores" name="high-score-header" class="high-score-header" />
+            <ui:VisualElement name="scores-wrapper">
+                <ui:VisualElement name="buttons" class="row-wrapper">
+                    <ui:Button text="Rank" display-tooltip-when-elided="true" name="rank-button" class="sort-button" style="width: 90px; overflow: visible;" />
+                    <ui:Button text="Name" display-tooltip-when-elided="true" name="name-button" class="sort-button" style="width: 90px; overflow: visible;" />
+                    <ui:Button text="Score" display-tooltip-when-elided="true" name="score-button" class="sort-button" style="width: 90px; overflow: visible; white-space: normal;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="scores" />
+                <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" style="min-height: auto; max-height: 1080px;">
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label text="#01" display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label text="HTW" display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label text="99999" display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label text="#02" display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label text="HTW" display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label text="19000" display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label text="#03" display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label text="HTW" display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label text="18000" display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label text="#04" display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label text="HTW" display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label text="17000" display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label text="#05" display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label text="HTW" display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label text="16000" display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label text="#06" display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label text="HTW" display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label text="15000" display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label text="#07" display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label text="HTW" display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label text="14000" display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label text="#08" display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label text="HTW" display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label text="13000" display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label text="#09" display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label text="HTW" display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label text="12000" display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label text="#10" display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label text="HTW" display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label text="10000" display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                </ui:ScrollView>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

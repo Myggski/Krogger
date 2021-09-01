@@ -60,6 +60,7 @@
     border-top-color: rgba(0, 0, 0, 0);
     border-bottom-color: rgba(0, 0, 0, 0);
     display: flex;
+    -unity-font-definition: url("/Assets/Fonts/LEMONMILK-Medium.otf");
 }
 
 .button:hover {
@@ -111,6 +112,7 @@
     padding-left: 0;
     padding-right: 0;
     padding-bottom: 48px;
+    -unity-font-definition: url("/Assets/Fonts/LEMONMILK-bold.otf");
 }
 
 .hidden {
