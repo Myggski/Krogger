@@ -1,10 +1,3 @@
-using System;
-using System.Collections;
-using System.Linq;
-using System.Threading.Tasks;
-using FG;
-using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -12,12 +5,11 @@ using UnityEngine.SceneManagement;
 
 namespace FG {
     public class MenuManager : MonoBehaviour {
-        [Scene]
-        [SerializeField] 
-        private string _sceneName = string.Empty;
+        [FG.Scene] 
+        [SerializeField] private string _sceneName = string.Empty;
 
         private static MenuManager _instance;
-        
+
         private VisualElement _rootElement;
         private VisualElement _overlay;
         private Label _pausedText;
@@ -39,7 +31,7 @@ namespace FG {
 
             ToggleMenu();
         }
-        
+
         /// <summary>
         /// Making sure that there's only one of this component
         /// </summary>
@@ -62,7 +54,7 @@ namespace FG {
             _instance.gameObject.SetActive(!IsActive);
             Time.timeScale = IsActive ? 0 : 1;
         }
-        
+
         /// <summary>
         /// When a player clicks on the "Play"-button, it changes scene
         /// </summary>
@@ -82,7 +74,7 @@ namespace FG {
         private void QuitApplication() {
             Application.Quit();
         }
-        
+
         /// <summary>
         /// Hides button from the menu by adding a class to the button
         /// </summary>
@@ -90,7 +82,7 @@ namespace FG {
         private void HideElement(VisualElement element) {
             element.AddToClassList("hidden");
         }
-        
+
         /// <summary>
         /// Show button from the menu by removing a class from the button
         /// </summary>
@@ -116,9 +108,9 @@ namespace FG {
             ShowElement(_overlay);
             ShowElement(_pausedText);
             ShowElement(_resumeButton);
-            HideElement( _playButton);
+            HideElement(_playButton);
         }
-        
+
         /// <summary>
         /// Showing correct button depending on the scene
         /// Start = Show Play
@@ -148,7 +140,7 @@ namespace FG {
             _resumeButton.RegisterCallback<ClickEvent>(ev => ToggleMenu());
             _playButton.RegisterCallback<ClickEvent>(ev => StartGame());
             _quitButton.RegisterCallback<ClickEvent>(ev => QuitApplication());
-            
+
             DisplayCorrectElements();
         }
 
@@ -159,7 +151,7 @@ namespace FG {
             if (!ReferenceEquals(_resumeButton, null)) {
                 _resumeButton.UnregisterCallback<ClickEvent>(ev => ToggleMenu());
             }
-            
+
             if (!ReferenceEquals(_playButton, null)) {
                 _playButton.UnregisterCallback<ClickEvent>(ev => StartGame());
             }
