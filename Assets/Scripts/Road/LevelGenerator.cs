@@ -19,10 +19,8 @@ public class LevelGenerator : MonoBehaviour
     
     private void Awake()
     {
-        _lastTrackPiece = trackPieces[0];
-        _currentTrackPiece = Instantiate(_lastTrackPiece, _spawnPosition, Quaternion.identity);
-        _trackQueue.Enqueue(_currentTrackPiece);
-
+        SetupSafeStart();
+        
         // Initiate with a chunk of the level already done
         for (int i = 0; i < 20; i++)
         {
@@ -30,6 +28,18 @@ public class LevelGenerator : MonoBehaviour
         }
  
         StartCoroutine(SpawnTracks(2f));
+    }
+
+    // Initializes _LastTrackPiece and sets up a safe first row
+    // _lastTrackPiece is needed for the method SpawnNextTrackPiece()
+    private void SetupSafeStart()
+    {
+        _lastTrackPiece = trackPieces[0];
+        _currentTrackPiece = Instantiate(_lastTrackPiece, _spawnPosition, Quaternion.identity);
+        _trackQueue.Enqueue(_currentTrackPiece);
+        // Spawn two additional rows of safe grass
+        SpawnNextTrackPiece(0);
+        SpawnNextTrackPiece(0);
     }
 
     // Remove this? Used to infinitely spawn tracks every <frequency> seconds
@@ -47,9 +57,24 @@ public class LevelGenerator : MonoBehaviour
     /// <summary>
     /// Spawns the next track piece, and updates the position for the next piece.
     /// </summary>
-    private void SpawnNextTrackPiece()
+    public void SpawnNextTrackPiece()
     {
         int trackIndex = Random.Range(0, trackPieces.Length);
+        _currentTrackPiece = trackPieces[trackIndex];
+        _spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
+        
+        _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, Quaternion.identity));
+        
+        if (_trackQueue.Count > maxTrackPieces)
+        {
+            Destroy(_trackQueue.Dequeue());
+        }
+
+        _lastTrackPiece = _currentTrackPiece;
+    }
+
+    public void SpawnNextTrackPiece(int trackIndex)
+    {
         _currentTrackPiece = trackPieces[trackIndex];
         _spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
         

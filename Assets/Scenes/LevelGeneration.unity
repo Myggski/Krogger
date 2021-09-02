@@ -335,7 +335,7 @@ MonoBehaviour:
   - {fileID: 6473116379180799607, guid: a6a50ca11afe97f4a9f1371868fa7ac1, type: 3}
   - {fileID: 7594853750308088664, guid: 51a1e73ce49d3ae48885cf6816d9372c, type: 3}
   - {fileID: 8142207296799273263, guid: 8c68c9c1880081d4e8793b066787ad4a, type: 3}
-  maxTrackPieces: 20
+  maxTrackPieces: 30
 --- !u!4 &1639529212
 Transform:
   m_ObjectHideFlags: 0
