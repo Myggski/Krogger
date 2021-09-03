@@ -4,13 +4,10 @@ using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 
 namespace FG {
-    public class MenuManager : MonoBehaviour {
+    public sealed class MenuManager : UIManager<MenuManager> {
         [FG.Scene] 
         [SerializeField] private string _sceneName = string.Empty;
-
-        private static MenuManager _instance;
-
-        private VisualElement _rootElement;
+        
         private VisualElement _overlay;
         private Label _pausedText;
         private Button _resumeButton;
@@ -18,7 +15,7 @@ namespace FG {
         private Button _quitButton;
 
         private bool IsFirstScene => SceneManager.GetActiveScene().buildIndex == 0;
-        private bool IsActive => _instance.gameObject.activeSelf;
+        private bool IsActive => instance.gameObject.activeSelf;
 
         /// <summary>
         /// This is called when the player presses ESC with the new Unity Input System
@@ -33,25 +30,13 @@ namespace FG {
         }
 
         /// <summary>
-        /// Making sure that there's only one of this component
-        /// </summary>
-        private void InitializeManager() {
-            if (_instance != null && _instance != this) {
-                Destroy(gameObject);
-            }
-            else {
-                _instance = this;
-            }
-        }
-
-        /// <summary>
         /// Displaying/hiding menu, when the menu shows, pause the game
         /// </summary>
         private void ToggleMenu() {
             // Remove focus to remove warning about focusable
-            _rootElement.focusController?.focusedElement?.Blur();
+            rootElement.focusController?.focusedElement?.Blur();
 
-            _instance.gameObject.SetActive(!IsActive);
+            instance.gameObject.SetActive(!IsActive);
             Time.timeScale = IsActive ? 0 : 1;
         }
 
@@ -73,22 +58,6 @@ namespace FG {
         /// </summary>
         private void QuitApplication() {
             Application.Quit();
-        }
-
-        /// <summary>
-        /// Hides button from the menu by adding a class to the button
-        /// </summary>
-        /// <param name="element">It can be either Play- or Resume-button</param>
-        private void HideElement(VisualElement element) {
-            element.AddToClassList("hidden");
-        }
-
-        /// <summary>
-        /// Show button from the menu by removing a class from the button
-        /// </summary>
-        /// <param name="element">It can be either Play- or Resume-button</param>
-        private void ShowElement(VisualElement element) {
-            element.RemoveFromClassList("hidden");
         }
 
         /// <summary>
@@ -128,14 +97,14 @@ namespace FG {
         /// <summary>
         /// Add click events on the buttons in the menu
         /// </summary>
-        private void InitializeElements() {
-            _rootElement = GetComponent<UIDocument>().rootVisualElement;
+        protected override void InitializeElements() {
+            rootElement = document.rootVisualElement;
 
-            _overlay = _rootElement.Q<VisualElement>("overlay");
-            _pausedText = _rootElement.Q<Label>("pausedText");
-            _resumeButton = _rootElement.Q<Button>("resume");
-            _playButton = _rootElement.Q<Button>("play");
-            _quitButton = _rootElement.Q<Button>("quit");
+            _overlay = rootElement.Q<VisualElement>("overlay");
+            _pausedText = rootElement.Q<Label>("pausedText");
+            _resumeButton = rootElement.Q<Button>("resume");
+            _playButton = rootElement.Q<Button>("play");
+            _quitButton = rootElement.Q<Button>("quit");
 
             _resumeButton.RegisterCallback<ClickEvent>(ev => ToggleMenu());
             _playButton.RegisterCallback<ClickEvent>(ev => StartGame());
@@ -147,7 +116,7 @@ namespace FG {
         /// <summary>
         /// Cleaning up the click events
         /// </summary>
-        private void RemoveClickEvents() {
+        protected override void RemoveClickEvents() {
             if (!ReferenceEquals(_resumeButton, null)) {
                 _resumeButton.UnregisterCallback<ClickEvent>(ev => ToggleMenu());
             }
@@ -159,18 +128,6 @@ namespace FG {
             if (!ReferenceEquals(_quitButton, null)) {
                 _quitButton.UnregisterCallback<ClickEvent>(ev => QuitApplication());
             }
-        }
-
-        private void Awake() {
-            InitializeManager();
-        }
-
-        private void OnEnable() {
-            InitializeElements();
-        }
-
-        private void OnDisable() {
-            RemoveClickEvents();
         }
     }
 }
