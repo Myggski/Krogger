@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="Menu.uss" />
+    <ui:VisualElement name="root" class="menu-root">
+        <ui:VisualElement name="overlay" class="overlay" />
+        <ui:VisualElement name="button-wrapper" class="button-wrapper">
+            <ui:Label text="[PAUSED]" name="pausedText" class="paused-text" />
+            <ui:Button text="Resume" name="resume" class="button" />
+            <ui:Button text="Play" name="play" class="button" />
+            <ui:Button text="Quit" name="quit" class="button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
