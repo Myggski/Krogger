@@ -2,28 +2,44 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Core.Extensions;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace FG {
-	public sealed class HighscoreManager : UIManager<HighscoreManager> {
+	public sealed class HighscoreManager : UIManagerBase<HighscoreManager> {
+		[Scene]
+		[SerializeField]
+		private string menuScene = string.Empty;
+
+		[Header("API")]
 		// API
 		[SerializeField]
 		private string apiUrl = string.Empty;
-		private HighscoreService highscoreService;
+		[SerializeField] 
+		private string loadingMessage = "LOADING HIGH SCORES...";
+		[SerializeField] 
+		private string internalServerErrorMEssage = "Server is down :(";
 		
 		// UI
-		private VisualElement contentWrapper;
-		private VisualElement loadingWrapper;
+		private VisualElement scoresContent;
+		private VisualElement messageContent;
 		private VisualElement contentButtonsWrapper;
 		private Button nameButton;
 		private Button scoreButton;
+		private Button backButton;
+		private Button refreshButton;
+		private Label messageText;
 		private UQueryBuilder<VisualElement> playerScores;
 		
 		// Data information
-		private List<HighscoreData> highScoreList;
 		private bool ascending;
+		private HighscoreService highscoreService;
 		private HighscoreSortType previousSortType;
+		private List<HighscoreData> highScoreList;
+		
 		
 		// "Constant" top highscore
 		private List<HighscoreData> TopHighscore => highScoreList
@@ -49,25 +65,56 @@ namespace FG {
 				: string.Empty;
 		}
 
-		private void LoadingDone() {
-			HideElement(loadingWrapper);
-			contentWrapper.style.opacity = 1;
+		/// <summary>
+		/// Disable refresh-button and change text to loading...
+		/// </summary>
+		private void DisplayLoading() {
+			refreshButton.SetEnabled(false);
+			messageText.text = loadingMessage;
+
+			ShowElement(messageContent);
+			HideElement(scoresContent, VisibilityStyleType.opacity);
+		}
+
+		/// <summary>
+		/// Enables refresh-button and removes message-text
+		/// </summary>
+		private void HideLoading(string errorMessage) {
+			refreshButton.SetEnabled(true);
+
+			if (errorMessage == string.Empty) {
+				HideElement(messageContent);
+				ShowElement(scoresContent, VisibilityStyleType.opacity);
+			} else {
+				messageText.text = errorMessage;
+			}
 		}
 
 		/// <summary>
 		/// Get highscore from API with the help of HighscoreService
 		/// </summary>
 		private async void RequestHighscore() {
+			string errorMessage = string.Empty;
+
+			DisplayLoading();
+
 			try {
 				HighscoreResponseData responseData = await highscoreService.GetList();
-				highScoreList = responseData.Data;
 
-				LoadingDone();
-				SortListBy(HighscoreSortType.Score);
+				if (responseData.Status == (int)HttpStatusCode.OK) {
+					highScoreList = responseData.Data;
+				
+					SortListBy(HighscoreSortType.Score);
+					
+				} else {
+					errorMessage = responseData.Message;
+				}
 			}
-			catch (Exception ex) {
-				Debug.LogWarning(ex);
+			catch {
+				errorMessage = internalServerErrorMEssage;
 			}
+			
+			HideLoading(errorMessage);
 		}
 
 		/// <summary>
@@ -118,8 +165,7 @@ namespace FG {
 					.OrderBy(highscoreData =>
 						OrderByQuery(highscoreData, propertyNameFromEnum))
 					.ToList();
-			}
-			else {
+			} else {
 				highScoreList = highScoreList
 					.OrderByDescending(highscoreData =>
 						OrderByQuery(highscoreData, propertyNameFromEnum))
@@ -131,6 +177,17 @@ namespace FG {
 		}
 
 		/// <summary>
+		/// Loads menu scene
+		/// </summary>
+		private void GoBackScene() {
+			if (menuScene != string.Empty) {
+				SceneManager.LoadScene(menuScene);
+			} else {
+				Debug.LogWarning($"You need to select a scene to load when pressing the \"Back to menu\"-button.");
+			}
+		}
+
+		/// <summary>
 		/// Setup Lists and HighscoreService
 		/// </summary>
 		private void Setup() {
@@ -138,8 +195,7 @@ namespace FG {
 
 			if (apiUrl != string.Empty) {
 				highscoreService = new HighscoreService(apiUrl);	
-			}
-			else {
+			} else {
 				Debug.LogWarning("You need to add apiUrl to make an API-request");
 			}
 		}
@@ -149,17 +205,22 @@ namespace FG {
 		/// </summary>
 		protected override void InitializeElements() {
 			rootElement = document.rootVisualElement;
-			contentWrapper = rootElement.Q<VisualElement>("content-wrapper");
-			loadingWrapper = rootElement.Q<VisualElement>("loading-wrapper");
 
 			// content-wrapper
-			contentButtonsWrapper = contentWrapper.Q<VisualElement>("buttons");
+			scoresContent = rootElement.Q<VisualElement>("scores-content");
+			contentButtonsWrapper = scoresContent.Q<VisualElement>("buttons");
 			nameButton = contentButtonsWrapper.Q<Button>("name-button");
 			scoreButton = contentButtonsWrapper.Q<Button>("score-button");
+			backButton = rootElement.Q<Button>("back-button");
+			refreshButton = rootElement.Q<Button>("refresh-button");
 			playerScores = rootElement.Query<VisualElement>("player-score");
-			
-			nameButton.RegisterCallback<ClickEvent>(ev => SortListBy(HighscoreSortType.Name));
-			scoreButton.RegisterCallback<ClickEvent>(ev => SortListBy(HighscoreSortType.Score));
+			messageContent = rootElement.Q<VisualElement>("message-content");
+			messageText = messageContent.Q<Label>("message-text");
+
+			nameButton.On<ClickEvent>(ev => SortListBy(HighscoreSortType.Name));
+			scoreButton.On<ClickEvent>(ev => SortListBy(HighscoreSortType.Score));
+			backButton.On<ClickEvent>(ev => GoBackScene());
+			refreshButton.On<ClickEvent>(ev => RequestHighscore());
 		}
 
 		/// <summary>
@@ -168,6 +229,8 @@ namespace FG {
 		protected override void RemoveClickEvents() {
 			nameButton.UnregisterCallback<ClickEvent>(ev => SortListBy(HighscoreSortType.Name));
 			scoreButton.UnregisterCallback<ClickEvent>(ev => SortListBy(HighscoreSortType.Score));
+			backButton.UnregisterCallback<ClickEvent>(ev => GoBackScene());
+			refreshButton.UnregisterCallback<ClickEvent>(ev => RequestHighscore());
 		}
 
 		protected override void Awake() {

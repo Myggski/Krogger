@@ -29,37 +29,32 @@
 }
 
 .button {
-    font-size: 32px;
+    font-size: 64px;
     color: rgb(255, 255, 255);
     background-color: rgb(246, 92, 81);
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
     border-top-right-radius: 6px;
     border-bottom-right-radius: 6px;
-    -unity-text-outline-width: 0;
-    -unity-text-outline-color: rgb(0, 0, 0);
-    text-shadow: 0 0 1px rgba(0, 0, 0, 0);
-    letter-spacing: 5px;
-    word-spacing: 5px;
-    -unity-paragraph-spacing: 5px;
     margin-left: 0;
     margin-right: 0;
-    margin-top: 1px;
-    margin-bottom: 17px;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    width: 100%;
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
+    margin-top: 0;
+    margin-bottom: 24px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 22px;
+    padding-bottom: 0;
+    -unity-font-definition: url('/Assets/Fonts/Silver.ttf');
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
     border-left-color: rgba(0, 0, 0, 0);
     border-right-color: rgba(0, 0, 0, 0);
     border-top-color: rgba(0, 0, 0, 0);
     border-bottom-color: rgba(0, 0, 0, 0);
-    display: flex;
+    min-width: auto;
+    width: 100%;
 }
 
 .button:hover {
@@ -73,7 +68,9 @@
     border-top-color: rgb(0, 0, 0);
     border-bottom-color: rgb(0, 0, 0);
     margin-top: 0;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .button:active {
@@ -92,7 +89,7 @@
 
 .paused-text {
     color: rgb(255, 255, 255);
-    font-size: 48px;
+    font-size: 128px;
     margin-left: 0;
     padding-left: 0;
     padding-right: 0;
@@ -111,6 +108,7 @@
     padding-left: 0;
     padding-right: 0;
     padding-bottom: 48px;
+    -unity-font-definition: url('/Assets/Fonts/Silver.ttf');
 }
 
 .hidden {

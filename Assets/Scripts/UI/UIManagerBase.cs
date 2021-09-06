@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace FG {
 	[RequireComponent(typeof(UIDocument))]
-	public abstract class UIManager<T> : MonoBehaviour {
+	public abstract class UIManagerBase<T> : MonoBehaviour {
 		protected static T instance;
 		protected UIDocument document;
 		protected VisualElement rootElement;
@@ -26,16 +26,30 @@ namespace FG {
 		/// Hides button from the menu by adding a class to the button
 		/// </summary>
 		/// <param name="element">It can be either Play- or Resume-button</param>
-		protected void HideElement(VisualElement element) {
-			element.AddToClassList("hidden");
+		/// /// <param name="visibilityStyleType">Hide it by changing display, or opacity</param>
+		protected void HideElement(VisualElement element, VisibilityStyleType visibilityStyleType = VisibilityStyleType.display) {
+			if (visibilityStyleType == VisibilityStyleType.display) {
+				element.AddToClassList("hidden");	
+			} else {
+				element.style.opacity = 0f;
+			}
+			
 		}
 
 		/// <summary>
 		/// Show button from the menu by removing a class from the button
 		/// </summary>
 		/// <param name="element">It can be either Play- or Resume-button</param>
-		protected void ShowElement(VisualElement element) {
-			element.RemoveFromClassList("hidden");
+		/// /// <param name="visibilityStyleType">Show it by changing display, or opacity</param>
+		protected void ShowElement(VisualElement element, VisibilityStyleType visibilityStyleType = VisibilityStyleType.display) {
+			if (visibilityStyleType == VisibilityStyleType.display)
+			{
+				element.RemoveFromClassList("hidden");	
+			}
+			else {
+				element.style.opacity = 1f;
+			}
+			
 		}
 
 		/// <summary>

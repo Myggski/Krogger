@@ -1,7 +1,10 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using Unity.Plastic.Newtonsoft.Json;
 
 namespace FG {
+	/// <summary>
+	/// Request information
+	/// </summary>
 	public class HighscoreResponseData {
 		[JsonProperty("statuscode")]
 		public string StatusCode;

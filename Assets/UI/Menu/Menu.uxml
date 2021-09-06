@@ -6,6 +6,7 @@
             <ui:Label text="[PAUSED]" name="pausedText" class="paused-text" />
             <ui:Button text="Resume" name="resume" class="button" />
             <ui:Button text="Play" name="play" class="button" />
+            <ui:Button text="Scoreboard" name="scoreboard" class="button" />
             <ui:Button text="Quit" name="quit" class="button" />
         </ui:VisualElement>
     </ui:VisualElement>
