@@ -4,7 +4,7 @@ namespace FG {
 	/// <summary>
 	/// Score information
 	/// </summary>
-	public class HighscoreData {
+	public class HighScoreData {
 		[JsonProperty("name")]
 		public string Name { get; set; }
 

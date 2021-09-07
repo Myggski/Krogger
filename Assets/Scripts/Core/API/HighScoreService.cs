@@ -4,14 +4,14 @@ using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine.Networking;
 
 namespace FG {
-	public class HighscoreService {
+	public class HighScoreService {
 		/// <summary>
 		/// Url to the API server
 		/// </summary>
-		private string apiUrl;
+		private readonly string _apiUrl;
 
-		public HighscoreService(string apiUrl) {
-			this.apiUrl = apiUrl;
+		public HighScoreService(string apiUrl) {
+			_apiUrl = apiUrl;
 		}
 		
 		/// <summary>
@@ -19,8 +19,8 @@ namespace FG {
 		/// </summary>
 		/// <returns></returns>
 		/// <exception cref="Exception"></exception>
-		public async Task<HighscoreResponseData> GetList() {
-			UnityWebRequest request = UnityWebRequest.Get(apiUrl);
+		public async Task<HighScoreResponseData> GetList() {
+			UnityWebRequest request = UnityWebRequest.Get(_apiUrl);
 			request.SetRequestHeader("Content-Type", "application/json");
 			UnityWebRequestAsyncOperation requestOperation = request.SendWebRequest();
 
@@ -29,8 +29,8 @@ namespace FG {
 			}
 
 			if (request.result == UnityWebRequest.Result.Success) {
-				HighscoreResponseData responseDataData =
-						JsonConvert.DeserializeObject<HighscoreResponseData>(request.downloadHandler.text);
+				HighScoreResponseData responseDataData =
+						JsonConvert.DeserializeObject<HighScoreResponseData>(request.downloadHandler.text);
 
 					return responseDataData;
 			}

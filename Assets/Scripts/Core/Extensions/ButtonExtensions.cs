@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UnityEngine.UIElements;
+﻿using UnityEngine.UIElements;
 
 namespace Core.Extensions {
     public static class ButtonExtensions {
@@ -13,12 +12,16 @@ namespace Core.Extensions {
         public static void On<TEventType>(this Button button, EventCallback<TEventType> callback,
             TrickleDown useTrickeDown = TrickleDown.NoTrickleDown) where TEventType : EventBase<TEventType>, new() {
             if (typeof(TEventType).IsAssignableFrom(typeof(ClickEvent))) {
-                callback += evt => {
+                EventCallback<TEventType> middleware = evt => {
                     button?.focusController?.focusedElement?.Blur();
                 };
-            }
 
-            button.RegisterCallback(callback , useTrickeDown);
+                middleware += callback; 
+                
+                button.RegisterCallback(middleware , useTrickeDown);
+            } else {
+                button.RegisterCallback(callback , useTrickeDown);   
+            }
         }
     }
 }

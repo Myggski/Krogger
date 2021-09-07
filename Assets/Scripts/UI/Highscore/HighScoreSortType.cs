@@ -1,5 +1,5 @@
 namespace FG {
-	public enum HighscoreSortType {
+	public enum HighScoreSortType {
 		Name = 0,
 		Score = 1,
 	}

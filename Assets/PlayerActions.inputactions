@@ -2,7 +2,7 @@
     "name": "PlayerActions",
     "maps": [
         {
-            "name": "Keyboard",
+            "name": "Player",
             "id": "69ccad7c-1320-4054-8a5c-83a92fc5dd98",
             "actions": [
                 {
@@ -34,30 +34,6 @@
                     "type": "Value",
                     "id": "c53b1b38-aaa0-4e52-bb51-860e910e4bc7",
                     "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "ToggleMenu",
-                    "type": "Button",
-                    "id": "8cdb53ea-99d6-4c77-ac7a-3f8542ceb952",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Point",
-                    "type": "PassThrough",
-                    "id": "b9b00227-3815-4f22-9567-a4a813bad223",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Click",
-                    "type": "Button",
-                    "id": "ce367e7a-733f-4fc1-b46b-ac538dddf8d1",
-                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -150,21 +126,42 @@
                     "action": "MoveLeft",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "ca033f7a-5add-415c-aa48-0a451a42e24e",
+            "actions": [
                 {
-                    "name": "",
-                    "id": "ebd33d78-d4b2-4930-8928-72e1a3b018fd",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
+                    "name": "Point",
+                    "type": "PassThrough",
+                    "id": "158f504f-b587-46ae-a35c-eec3dc69b351",
+                    "expectedControlType": "Vector2",
                     "processors": "",
-                    "groups": "",
-                    "action": "ToggleMenu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
+                    "interactions": ""
                 },
                 {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "44b950df-d090-4424-a7b5-3b7267b4d40a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "ToggleMenu",
+                    "type": "Button",
+                    "id": "bf901351-3311-43b8-a914-42663138bc86",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
                     "name": "",
-                    "id": "6766dcd4-47c6-4850-9f4f-5fb8aacb4f35",
+                    "id": "d7b312d2-2a4f-43c5-9eb6-cf50a04ea6ab",
                     "path": "<Mouse>/position",
                     "interactions": "",
                     "processors": "",
@@ -175,12 +172,23 @@
                 },
                 {
                     "name": "",
-                    "id": "1599ac63-9c7a-4437-b433-478d00deb0ba",
+                    "id": "f214b3f6-1eea-4f4f-ac3b-b277b151bfc0",
                     "path": "<Mouse>/press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c59e4ad7-f70b-42a9-b817-59bdc1e39174",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
