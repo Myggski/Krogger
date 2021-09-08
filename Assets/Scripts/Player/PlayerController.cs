@@ -7,20 +7,25 @@ namespace FG {
 	public class PlayerController : MonoBehaviour {
 		[Header("Movement")]
 		[SerializeField]
-		private float _movementSpeed = 5.0f;
+		private float movementSpeed = 5.0f;
+
 		[SerializeField]
-		private float _movementStepsInUnits = 1f;
+		private float movementStepsInUnits = 1f;
 
 		[Header("Animation")]
 		[SerializeField] 
-		private string _jumpAnimationTriggerName = "Jump";
+		private string jumpAnimationTriggerName = "Jump";
+
 		[SerializeField]
-		private Animator _animator;
+		private Animator animator;
 		
+		// Data information
 		private float _rotationAngle;
 		private List<Vector3> _queuedMovements;
 		private Vector3 _currentPosition;
+		private Transform _transform;
 
+		// Helpers
 		private bool HasQueuedMovements => _queuedMovements.Any();
 		private bool HasSpotsLeftInMovementQueue => _queuedMovements.Count < 2;
 		private Vector3 NextDirection => HasQueuedMovements ? _queuedMovements[0] : Vector3.zero;
@@ -43,11 +48,11 @@ namespace FG {
 		/// <param name="nextDirection"></param>
 		private void QueueNewDirection(Vector3 nextDirection) {
 			if (HasQueuedMovements && HasSpotsLeftInMovementQueue) {
-				_queuedMovements.Add(LastDirection + nextDirection * _movementStepsInUnits);
+				_queuedMovements.Add(LastDirection + nextDirection * movementStepsInUnits);
 			}
 			else if (!HasQueuedMovements) {
-				Vector3 currentPosition = new Vector3(_currentPosition.x, transform.position.y, _currentPosition.z);
-				_queuedMovements.Add(currentPosition + (nextDirection * _movementStepsInUnits));
+				Vector3 currentPosition = new Vector3(_currentPosition.x, _transform.position.y, _currentPosition.z);
+				_queuedMovements.Add(currentPosition + (nextDirection * movementStepsInUnits));
 
 				SetupNewMovement();
 			}
@@ -57,12 +62,12 @@ namespace FG {
 		/// Sets the speed of the animation and recalculate the new angle to rotate
 		/// </summary>
 		private void SetupNewMovement() {
-			_rotationAngle = Quaternion.Angle(transform.rotation,
-				Quaternion.LookRotation((NextDirection - transform.position).normalized));
+			_rotationAngle = Quaternion.Angle(_transform.rotation,
+				Quaternion.LookRotation((NextDirection - _transform.position).normalized));
 
-			if (_animator) {
-				_animator.speed = (_movementSpeed * _queuedMovements.Count) / _movementStepsInUnits;
-				_animator.SetTrigger(_jumpAnimationTriggerName);
+			if (animator) {
+				animator.speed = (movementSpeed * _queuedMovements.Count) / movementStepsInUnits;
+				animator.SetTrigger(jumpAnimationTriggerName);
 			}
 			else {
 				Debug.LogWarning("There's no animation attached of Krister jumping.");
@@ -74,7 +79,7 @@ namespace FG {
 		/// </summary>
 		private void ResetMovementInfo() {
 			_queuedMovements.RemoveAt(0);
-			_currentPosition = transform.position;
+			_currentPosition = _transform.position;
 
 			if (HasQueuedMovements) {
 				SetupNewMovement();
@@ -85,10 +90,10 @@ namespace FG {
 		/// Rotate Krister in sync with movement, the rotation should be done same time as movement
 		/// </summary>
 		private void MoveAndRotate() {
-			transform.position = Vector3.MoveTowards(transform.position, NextDirection, (_movementSpeed * _queuedMovements.Count) * Time.deltaTime);
-			transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation((NextDirection - _currentPosition).normalized), Time.deltaTime * (_rotationAngle / (1 / _movementSpeed * _movementStepsInUnits)));
+			_transform.position = Vector3.MoveTowards(_transform.position, NextDirection, (movementSpeed * _queuedMovements.Count) * Time.deltaTime);
+			_transform.rotation = Quaternion.RotateTowards(_transform.rotation,Quaternion.LookRotation((NextDirection - _currentPosition).normalized), Time.deltaTime * (_rotationAngle / (1 / movementSpeed * movementStepsInUnits)));
 
-			if (transform.position == NextDirection) {
+			if (_transform.position == NextDirection) {
 				ResetMovementInfo();
 			}
 		}
@@ -98,7 +103,8 @@ namespace FG {
 		/// </summary>
 		private void Setup() {
 			_queuedMovements = new List<Vector3>();
-			_currentPosition = transform.position;
+			_transform = transform;
+			_currentPosition = _transform.position;
 		}
 
 		/// <summary>

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Core.Extensions;
-using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace FG {
 	public sealed class HighscoreManager : UIManagerBase<HighscoreManager> {
+		// Scene
 		[Scene]
 		[SerializeField]
 		private string menuScene = string.Empty;
@@ -24,41 +23,41 @@ namespace FG {
 		private string internalServerErrorMEssage = "Server is down :(";
 		
 		// UI
-		private VisualElement scoresContent;
-		private VisualElement messageContent;
-		private VisualElement contentButtonsWrapper;
-		private Button nameButton;
-		private Button scoreButton;
-		private Button backButton;
-		private Button refreshButton;
-		private Label messageText;
-		private UQueryBuilder<VisualElement> playerScores;
+		private VisualElement _scoresContent;
+		private VisualElement _messageContent;
+		private VisualElement _contentButtonsWrapper;
+		private Button _nameButton;
+		private Button _scoreButton;
+		private Button _backButton;
+		private Button _refreshButton;
+		private Label _messageText;
+		private UQueryBuilder<VisualElement> _playerScores;
 		
 		// Data information
-		private bool ascending;
-		private HighscoreService highscoreService;
-		private HighscoreSortType previousSortType;
-		private List<HighscoreData> highScoreList;
+		private bool _ascending;
+		private HighScoreService _highScoreService;
+		private HighScoreSortType _previousSortType;
+		private List<HighScoreData> _highScoreList;
 		
 		
 		// "Constant" top highscore
-		private List<HighscoreData> TopHighscore => highScoreList
-			.OrderByDescending(highscore => highscore.Score)
+		private List<HighScoreData> TopHighScore => _highScoreList
+			.OrderByDescending(highScore => highScore.Score)
 			.ToList();
 
 		/// <summary>
 		/// Trying to find index of currentHighscoreData in top highscore list and return it as a fancy string
 		/// </summary>
-		/// <param name="currentHighscoreData">The currenet highscore data that's being rendered</param>
+		/// <param name="currentHighScoreData">The currenet highscore data that's being rendered</param>
 		/// <returns></returns>
-		private string GetRankText(HighscoreData currentHighscoreData) {
-			if (ReferenceEquals(currentHighscoreData, default(HighscoreData))) {
+		private string GetRankText(HighScoreData currentHighScoreData) {
+			if (ReferenceEquals(currentHighScoreData, default(HighScoreData))) {
 				return string.Empty;
 			}
 
-			int playerScoreIndex = TopHighscore
-				.FindIndex(highscoreData => 
-					ReferenceEquals(highscoreData, currentHighscoreData));
+			int playerScoreIndex = TopHighScore
+				.FindIndex(highScoreData => 
+					ReferenceEquals(highScoreData, currentHighScoreData));
 
 			return playerScoreIndex >= 0 
 				? $"#{playerScoreIndex + 1}" 
@@ -69,42 +68,42 @@ namespace FG {
 		/// Disable refresh-button and change text to loading...
 		/// </summary>
 		private void DisplayLoading() {
-			refreshButton.SetEnabled(false);
-			messageText.text = loadingMessage;
+			_refreshButton.SetEnabled(false);
+			_messageText.text = loadingMessage;
 
-			ShowElement(messageContent);
-			HideElement(scoresContent, VisibilityStyleType.opacity);
+			ShowElement(_messageContent);
+			HideElement(_scoresContent, VisibilityStyleType.opacity);
 		}
 
 		/// <summary>
 		/// Enables refresh-button and removes message-text
 		/// </summary>
 		private void HideLoading(string errorMessage) {
-			refreshButton.SetEnabled(true);
+			_refreshButton.SetEnabled(true);
 
 			if (errorMessage == string.Empty) {
-				HideElement(messageContent);
-				ShowElement(scoresContent, VisibilityStyleType.opacity);
+				HideElement(_messageContent);
+				ShowElement(_scoresContent, VisibilityStyleType.opacity);
 			} else {
-				messageText.text = errorMessage;
+				_messageText.text = errorMessage;
 			}
 		}
 
 		/// <summary>
 		/// Get highscore from API with the help of HighscoreService
 		/// </summary>
-		private async void RequestHighscore() {
+		private async void RequestHighScores() {
 			string errorMessage = string.Empty;
 
 			DisplayLoading();
 
 			try {
-				HighscoreResponseData responseData = await highscoreService.GetList();
+				HighScoreResponseData responseData = await _highScoreService.GetList();
 
 				if (responseData.Status == (int)HttpStatusCode.OK) {
-					highScoreList = responseData.Data;
+					_highScoreList = responseData.Data;
 				
-					SortListBy(HighscoreSortType.Score);
+					SortListBy(HighScoreSortType.Score);
 					
 				} else {
 					errorMessage = responseData.Message;
@@ -122,9 +121,9 @@ namespace FG {
 		/// </summary>
 		/// <param name="index">The index of the HighscoreData that we want from highScoreList</param>
 		/// <returns></returns>
-		private HighscoreData GetHighScoreDataFromIndex(int index) {
-			if (index < highScoreList.Count) {
-				return highScoreList[index];
+		private HighScoreData GetHighScoreDataFromIndex(int index) {
+			if (index < _highScoreList.Count) {
+				return _highScoreList[index];
 			}
 
 			return default;
@@ -134,12 +133,12 @@ namespace FG {
 		/// Render list in UI
 		/// </summary>
 		private void DisplayList() {
-			for (int i = 0; i < playerScores.ToList().Count; i++) {
-				HighscoreData highscoreData = GetHighScoreDataFromIndex(i);
+			for (int i = 0; i < _playerScores.ToList().Count; i++) {
+				HighScoreData highScoreData = GetHighScoreDataFromIndex(i);
 				
-				playerScores.AtIndex(i).Q<Label>("player-rank-text").text = GetRankText(highscoreData);
-				playerScores.AtIndex(i).Q<Label>("player-name-text").text = highscoreData?.Name;
-				playerScores.AtIndex(i).Q<Label>("player-score-text").text = highscoreData?.Score.ToString();
+				_playerScores.AtIndex(i).Q<Label>("player-rank-text").text = GetRankText(highScoreData);
+				_playerScores.AtIndex(i).Q<Label>("player-name-text").text = highScoreData?.Name;
+				_playerScores.AtIndex(i).Q<Label>("player-score-text").text = highScoreData?.Score.ToString();
 			}
 		}
 
@@ -147,32 +146,32 @@ namespace FG {
 		/// Sort list depending on sortType (HighscoreSortType) and sortOrder (ascending = true/false)
 		/// </summary>
 		/// <param name="sortType">What to sort, by name or by score</param>
-		private void SortListBy(HighscoreSortType sortType) {
-			string propertyNameFromEnum = Enum.GetName(typeof(HighscoreSortType), sortType);
-			ascending = !ascending;
+		private void SortListBy(HighScoreSortType sortType) {
+			string propertyNameFromEnum = Enum.GetName(typeof(HighScoreSortType), sortType);
+			_ascending = !_ascending;
 			
-			if (sortType != previousSortType) {
-				ascending = false;
+			if (sortType != _previousSortType) {
+				_ascending = false;
 			}
 
 			// Local function to get right property to sort
-			object OrderByQuery(HighscoreData data, string propertyName) {
+			object OrderByQuery(HighScoreData data, string propertyName) {
 				return data.GetType().GetProperty(propertyName)?.GetValue(data);
 			}
 			
-			if (ascending) {
-				highScoreList = highScoreList
+			if (_ascending) {
+				_highScoreList = _highScoreList
 					.OrderBy(highscoreData =>
 						OrderByQuery(highscoreData, propertyNameFromEnum))
 					.ToList();
 			} else {
-				highScoreList = highScoreList
+				_highScoreList = _highScoreList
 					.OrderByDescending(highscoreData =>
 						OrderByQuery(highscoreData, propertyNameFromEnum))
 					.ToList();
 			}
 
-			previousSortType = sortType;
+			_previousSortType = sortType;
 			DisplayList();
 		}
 
@@ -181,7 +180,8 @@ namespace FG {
 		/// </summary>
 		private void GoBackScene() {
 			if (menuScene != string.Empty) {
-				SceneManager.LoadScene(menuScene);
+				UnloadSelfScene();
+				LoadSceneAdditively(menuScene);
 			} else {
 				Debug.LogWarning($"You need to select a scene to load when pressing the \"Back to menu\"-button.");
 			}
@@ -191,10 +191,10 @@ namespace FG {
 		/// Setup Lists and HighscoreService
 		/// </summary>
 		private void Setup() {
-			highScoreList = new List<HighscoreData>();
+			_highScoreList = new List<HighScoreData>();
 
 			if (apiUrl != string.Empty) {
-				highscoreService = new HighscoreService(apiUrl);	
+				_highScoreService = new HighScoreService(apiUrl);	
 			} else {
 				Debug.LogWarning("You need to add apiUrl to make an API-request");
 			}
@@ -204,33 +204,33 @@ namespace FG {
 		/// Add click events on the buttons for sorting
 		/// </summary>
 		protected override void InitializeElements() {
-			rootElement = document.rootVisualElement;
+			_rootElement = _document.rootVisualElement;
 
 			// content-wrapper
-			scoresContent = rootElement.Q<VisualElement>("scores-content");
-			contentButtonsWrapper = scoresContent.Q<VisualElement>("buttons");
-			nameButton = contentButtonsWrapper.Q<Button>("name-button");
-			scoreButton = contentButtonsWrapper.Q<Button>("score-button");
-			backButton = rootElement.Q<Button>("back-button");
-			refreshButton = rootElement.Q<Button>("refresh-button");
-			playerScores = rootElement.Query<VisualElement>("player-score");
-			messageContent = rootElement.Q<VisualElement>("message-content");
-			messageText = messageContent.Q<Label>("message-text");
+			_scoresContent = _rootElement.Q<VisualElement>("scores-content");
+			_contentButtonsWrapper = _scoresContent.Q<VisualElement>("buttons");
+			_nameButton = _contentButtonsWrapper.Q<Button>("name-button");
+			_scoreButton = _contentButtonsWrapper.Q<Button>("score-button");
+			_backButton = _rootElement.Q<Button>("back-button");
+			_refreshButton = _rootElement.Q<Button>("refresh-button");
+			_playerScores = _rootElement.Query<VisualElement>("player-score");
+			_messageContent = _rootElement.Q<VisualElement>("message-content");
+			_messageText = _messageContent.Q<Label>("message-text");
 
-			nameButton.On<ClickEvent>(ev => SortListBy(HighscoreSortType.Name));
-			scoreButton.On<ClickEvent>(ev => SortListBy(HighscoreSortType.Score));
-			backButton.On<ClickEvent>(ev => GoBackScene());
-			refreshButton.On<ClickEvent>(ev => RequestHighscore());
+			_nameButton.On<ClickEvent>(ev => SortListBy(HighScoreSortType.Name));
+			_scoreButton.On<ClickEvent>(ev => SortListBy(HighScoreSortType.Score));
+			_backButton.On<ClickEvent>(ev => GoBackScene());
+			_refreshButton.On<ClickEvent>(ev => RequestHighScores());
 		}
 
 		/// <summary>
 		/// Cleaning up the click events
 		/// </summary>
 		protected override void RemoveClickEvents() {
-			nameButton.UnregisterCallback<ClickEvent>(ev => SortListBy(HighscoreSortType.Name));
-			scoreButton.UnregisterCallback<ClickEvent>(ev => SortListBy(HighscoreSortType.Score));
-			backButton.UnregisterCallback<ClickEvent>(ev => GoBackScene());
-			refreshButton.UnregisterCallback<ClickEvent>(ev => RequestHighscore());
+			_nameButton.UnregisterCallback<ClickEvent>(ev => SortListBy(HighScoreSortType.Name));
+			_scoreButton.UnregisterCallback<ClickEvent>(ev => SortListBy(HighScoreSortType.Score));
+			_backButton.UnregisterCallback<ClickEvent>(ev => GoBackScene());
+			_refreshButton.UnregisterCallback<ClickEvent>(ev => RequestHighScores());
 		}
 
 		protected override void Awake() {
@@ -242,7 +242,7 @@ namespace FG {
 		protected override void OnEnable() {
 			base.OnEnable();
 
-			RequestHighscore();
+			RequestHighScores();
 		}
 	}
 }

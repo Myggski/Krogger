@@ -1,24 +1,40 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace FG {
 	[RequireComponent(typeof(UIDocument))]
 	public abstract class UIManagerBase<T> : MonoBehaviour {
-		protected static T instance;
-		protected UIDocument document;
-		protected VisualElement rootElement;
+		// The instance
+		protected static T _instance;
+		// The UIToolkit document
+		protected UIDocument _document;
+		// The root element of the UI
+		protected VisualElement _rootElement;
+		
+		// Scene name where the instance were instantiated 
+		protected string InstanceSceneName => gameObject.scene.name; 
 		
 		/// <summary>
 		/// Making sure that there's only one of this component
 		/// </summary>
 		private void InitializeManager() {
-			if (!ReferenceEquals(instance, null) && !ReferenceEquals(instance, this)) {
+			if (!ReferenceEquals(_instance, null) && !ReferenceEquals(_instance, this)) {
 				Destroy(gameObject);
 			}
 			else {
-				instance = (T)Convert.ChangeType(this, typeof(T));
-				document = GetComponent<UIDocument>();
+				_instance = (T)Convert.ChangeType(this, typeof(T));
+				_document = GetComponent<UIDocument>();
+			}
+		}
+
+		/// <summary>
+		/// Cleanup the instance when destroyed
+		/// </summary>
+		private void RemoveInstance() {
+			if (ReferenceEquals((T) Convert.ChangeType(this, typeof(T)), _instance)) {
+				_instance = default;
 			}
 		}
 		
@@ -53,6 +69,22 @@ namespace FG {
 		}
 
 		/// <summary>
+		/// Uses UnloadSceneAsync because UnloadScene is obsolete
+		/// We don't need for the operator to be done in this case, because it's such small scenes that are being loaded
+		/// </summary>
+		protected void UnloadSelfScene() {
+			SceneManager.UnloadSceneAsync(InstanceSceneName);
+		}
+
+		/// <summary>
+		/// Loading a scene Addictive. Adds "partial" scene to current scene
+		/// </summary>
+		/// <param name="scene">The name of the scene that's being loaded</param>
+		protected void LoadSceneAdditively(string scene) {
+			SceneManager.LoadScene(scene, LoadSceneMode.Additive);
+		}
+
+		/// <summary>
 		/// Method to override, to set all the elements and is being called in OnEnable
 		/// </summary>
 		protected virtual void InitializeElements() {}
@@ -72,6 +104,10 @@ namespace FG {
 
 		protected virtual void OnDisable() {
 			RemoveClickEvents();
+		}
+
+		private void OnDestroy() {
+			RemoveInstance();
 		}
 	}
 }
