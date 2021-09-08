@@ -10,8 +10,8 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] 
     private GameObject[] trackPieces;
 
-    
-    public WeightedTrackPiece[] weightedTracks;
+    [SerializeField]
+    private WeightedTrackPiece[] weightedTracks;
 
     [SerializeField]
     private int maxTrackPieces = 20;
@@ -20,6 +20,8 @@ public class LevelGenerator : MonoBehaviour
 
     private Vector3 _spawnPosition = new Vector3(0, 0, 0);
 
+    private int _sumWeights = 0;
+
     private GameObject _lastTrackPiece;
     private GameObject _currentTrackPiece;
     
@@ -27,12 +29,17 @@ public class LevelGenerator : MonoBehaviour
     {
         SetupSafeStart();
         
+        foreach (var track in weightedTracks)
+        {
+            _sumWeights += track.Weight;
+        }
+
         // Initiate with a chunk of the level already done
         for (int i = 0; i < 20; i++)
         {
-            SpawnNextTrackPiece();
+            WeightedSpawnNextTrackPiece();
         }
- 
+
         StartCoroutine(SpawnTracks(2f));
     }
 
@@ -43,8 +50,7 @@ public class LevelGenerator : MonoBehaviour
         _lastTrackPiece = trackPieces[0];
         _currentTrackPiece = Instantiate(_lastTrackPiece, _spawnPosition, Quaternion.identity);
         _trackQueue.Enqueue(_currentTrackPiece);
-        // Spawn two additional rows of safe grass
-        SpawnNextTrackPiece(0);
+        // Spawn one additional rows of safe grass
         SpawnNextTrackPiece(0);
     }
 
@@ -55,9 +61,8 @@ public class LevelGenerator : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(frequency);
-            SpawnNextTrackPiece();
+            WeightedSpawnNextTrackPiece();
         }
-
     }
     
     /// <summary>
@@ -77,6 +82,41 @@ public class LevelGenerator : MonoBehaviour
         }
 
         _lastTrackPiece = _currentTrackPiece;
+    }
+
+    public void WeightedSpawnNextTrackPiece()
+    {
+        // Make sure the array isn't empty
+        if (weightedTracks.Length == 0) throw new Exception("WeightedTrackPiece array is empty! Go scream at the devs");
+
+        int roll = Random.Range(0, _sumWeights);
+        int currentIndex = 0;
+
+        foreach (var trackPiece in weightedTracks)
+        {
+            currentIndex += trackPiece.Weight;
+            if (roll < currentIndex)
+            {
+                SpawnNextTrackPiece(trackPiece.TrackPrefab);
+                return;
+            }
+        }
+
+        throw new Exception("No track could be picked. Go scream at the devs!");
+
+    }
+
+    private void SpawnNextTrackPiece(GameObject trackPiecePrefab)
+    {
+        _spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
+        _trackQueue.Enqueue(Instantiate(trackPiecePrefab, _spawnPosition, Quaternion.identity));
+        
+        if (_trackQueue.Count > maxTrackPieces)
+        {
+            Destroy(_trackQueue.Dequeue());
+        }
+
+        _lastTrackPiece = trackPiecePrefab;
     }
 
     public void SpawnNextTrackPiece(int trackIndex)
