@@ -1,10 +1,13 @@
 using UnityEngine;
 
 namespace FG {
-	public class WeightedTrackPiece
+	[System.Serializable]
+	public struct WeightedTrackPiece
 	{
+		[SerializeField]
 		private GameObject _trackPrefab;
-		
+	
+		[SerializeField]
 		private int _weight;
 
 		public GameObject TrackPrefab
