@@ -292,13 +292,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 367999416}
-  m_LocalRotation: {x: 0.33047596, y: 0.6251285, z: -0.33047596, w: 0.6251285}
-  m_LocalPosition: {x: -8.82, y: 24.76, z: -0.51}
+  m_LocalRotation: {x: 0.36456412, y: -0, z: -0, w: 0.93117833}
+  m_LocalPosition: {x: 0, y: 29.599792, z: -11.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 55.727, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 42.762, y: 0, z: 0}
 --- !u!1 &905530233
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,7 +328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73b521cb582859a48bfd2fb2cd4193f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 7475040029423083086, guid: b7825c452dabdd546b2f37d4c23797a1, type: 3}
+  player: {fileID: 1825621285455089822, guid: 727c859525cf51c4d80ced10f71cbcc7, type: 3}
   prefabReference: {fileID: 5312322186525602352, guid: f108d511a0355aa44ad76e5a052254ff, type: 3}
 --- !u!4 &905530235
 Transform:
@@ -354,6 +354,26 @@ PrefabInstance:
     - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
       propertyPath: continuousSpawn
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
+      propertyPath: weightedTracks.Array.data[0]._weight
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
+      propertyPath: weightedTracks.Array.data[1]._weight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
+      propertyPath: weightedTracks.Array.data[2]._weight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
+      propertyPath: weightedTracks.Array.data[3]._weight
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
+      propertyPath: weightedTracks.Array.data[4]._weight
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6439853484842327051, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
       propertyPath: m_Name

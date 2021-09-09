@@ -17,7 +17,7 @@ public class SpawnManager : MonoBehaviour
     {
         if (!ReferenceEquals(player, null))
         {
-            Instantiate(player, transform.position, Quaternion.identity);
+            Instantiate(player, transform.position, transform.rotation);
         }
     }
 
@@ -31,5 +31,9 @@ public class SpawnManager : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(transform.position, 1);
+        
+        Gizmos.color = Color.red;
+        Vector3 direction = transform.TransformDirection(Vector3.forward) * 5;
+        Gizmos.DrawRay(transform.position, direction);
     }
 }

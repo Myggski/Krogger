@@ -17,8 +17,8 @@ public class Obstacle : MonoBehaviour
 
     private void Update()
     {
-        var zPos = transform.position.z;
-        if (zPos >= 40 || zPos <= -40)
+        var xPos = transform.position.x;
+        if (xPos >= 40 || xPos <= -40)
         {
             Destroy(gameObject);
         }

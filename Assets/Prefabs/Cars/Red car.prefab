@@ -337,6 +337,7 @@ GameObject:
   - component: {fileID: 8034423930507755654}
   - component: {fileID: -1103203538813425482}
   - component: {fileID: -5947653957217949699}
+  - component: {fileID: 3164745866324451635}
   m_Layer: 0
   m_Name: Red car
   m_TagString: Untagged
@@ -440,3 +441,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 429.88
+--- !u!64 &3164745866324451635
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8394988496418218323}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6034407020498941660, guid: dfe2f8cc0a61a434ba5de893a8aa5389, type: 3}

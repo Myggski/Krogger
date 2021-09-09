@@ -32,6 +32,8 @@ public class LevelGenerator : MonoBehaviour
     {
         SetupSafeStart();
         
+        print("forward: " + transform.forward);
+        
         foreach (var track in weightedTracks)
         {
             _sumWeights += track.Weight;
@@ -54,7 +56,7 @@ public class LevelGenerator : MonoBehaviour
     private void SetupSafeStart()
     {
         _lastTrackPiece = weightedTracks[0].TrackPrefab;
-        _currentTrackPiece = Instantiate(_lastTrackPiece, _spawnPosition, Quaternion.identity);
+        _currentTrackPiece = Instantiate(_lastTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0));
         _trackQueue.Enqueue(_currentTrackPiece);
         // Spawn one additional rows of safe grass
         SpawnNextTrackPiece(0);
@@ -80,7 +82,7 @@ public class LevelGenerator : MonoBehaviour
         _currentTrackPiece = weightedTracks[trackIndex].TrackPrefab;
         _spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
         
-        _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, Quaternion.identity));
+        _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, transform.rotation));
         
         if (_trackQueue.Count > maxTrackPieces)
         {
@@ -115,8 +117,10 @@ public class LevelGenerator : MonoBehaviour
     private void SpawnNextTrackPiece(GameObject trackPiecePrefab)
     {
         _currentTrackPiece = trackPiecePrefab;
-        _spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
-        _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, Quaternion.identity));
+        //_spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
+        _spawnPosition += transform.forward * ((_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2));
+
+        _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0)));
         
         if (_trackQueue.Count > maxTrackPieces)
         {
@@ -129,9 +133,11 @@ public class LevelGenerator : MonoBehaviour
     public void SpawnNextTrackPiece(int trackIndex)
     {
         _currentTrackPiece = weightedTracks[trackIndex].TrackPrefab;
-        _spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
+        //_spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
+        _spawnPosition += transform.forward * ((_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2));
+
         
-        _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, Quaternion.identity));
+        _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0)));
         
         if (_trackQueue.Count > maxTrackPieces)
         {
@@ -139,5 +145,17 @@ public class LevelGenerator : MonoBehaviour
         }
 
         _lastTrackPiece = _currentTrackPiece;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Vector3 direction = transform.TransformDirection(Vector3.forward) * 20;
+        Gizmos.DrawRay(transform.position, direction);
+        
+        
+        Gizmos.color = Color.red;
+        Gizmos.matrix = transform.localToWorldMatrix;
+        Gizmos.DrawCube(transform.position, new Vector3(60, 1, 3));
     }
 }
