@@ -108,8 +108,9 @@ public class LevelGenerator : MonoBehaviour
 
     private void SpawnNextTrackPiece(GameObject trackPiecePrefab)
     {
+        _currentTrackPiece = trackPiecePrefab;
         _spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
-        _trackQueue.Enqueue(Instantiate(trackPiecePrefab, _spawnPosition, Quaternion.identity));
+        _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, Quaternion.identity));
         
         if (_trackQueue.Count > maxTrackPieces)
         {
