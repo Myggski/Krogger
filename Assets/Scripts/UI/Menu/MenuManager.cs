@@ -1,31 +1,43 @@
+using Core.Extensions;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 
 namespace FG {
-    public class MenuManager : MonoBehaviour {
-        [FG.Scene] 
-        [SerializeField] private string _sceneName = string.Empty;
+    public sealed class MenuManager : UIManagerBase<MenuManager> {
+        // Scenes
+        [Scene] 
+        [SerializeField] 
+        private string gameScene = string.Empty;
 
-        private static MenuManager _instance;
+        [Scene] 
+        [SerializeField] 
+        private string scoreboardScene = string.Empty;
 
-        private VisualElement _rootElement;
+        // Event
+        [SerializeField]
+        private UnityEvent onGameStart = new UnityEvent();
+        
+        // UI
         private VisualElement _overlay;
         private Label _pausedText;
         private Button _resumeButton;
         private Button _playButton;
+        private Button _scoreboard;
         private Button _quitButton;
 
-        private bool IsFirstScene => SceneManager.GetActiveScene().buildIndex == 0;
-        private bool IsActive => _instance.gameObject.activeSelf;
+        // Helpers
+        private bool IsInStartScene => SceneManager.GetActiveScene().buildIndex == 0;
+        private bool IsActive => !ReferenceEquals(_instance, null) && _instance.gameObject.activeSelf;
 
         /// <summary>
         /// This is called when the player presses ESC with the new Unity Input System
         /// </summary>
         /// <param name="value"></param>
         public void OnMenuToggle(InputAction.CallbackContext value) {
-            if (IsFirstScene || value.phase != InputActionPhase.Started) {
+            if (IsInStartScene || value.phase != InputActionPhase.Started) {
                 return;
             }
 
@@ -33,25 +45,10 @@ namespace FG {
         }
 
         /// <summary>
-        /// Making sure that there's only one of this component
-        /// </summary>
-        private void InitializeManager() {
-            if (_instance != null && _instance != this) {
-                Destroy(gameObject);
-            }
-            else {
-                _instance = this;
-            }
-        }
-
-        /// <summary>
         /// Displaying/hiding menu, when the menu shows, pause the game
         /// </summary>
         private void ToggleMenu() {
-            // Remove focus to remove warning about focusable
-            _rootElement.focusController?.focusedElement?.Blur();
-
-            _instance.gameObject.SetActive(!IsActive);
+            _instance.gameObject.SetActive(!_instance.gameObject.activeSelf);
             Time.timeScale = IsActive ? 0 : 1;
         }
 
@@ -59,12 +56,21 @@ namespace FG {
         /// When a player clicks on the "Play"-button, it changes scene
         /// </summary>
         private void StartGame() {
-            if (_sceneName != string.Empty) {
-                SceneManager.LoadScene(_sceneName);
+            if (gameScene != string.Empty) {
+                onGameStart.Invoke();
+                SceneManager.LoadScene(gameScene);
                 ToggleMenu();
-            }
-            else {
+            } else {
                 Debug.LogWarning($"You need to select a scene to load when pressing the Play-button.");
+            }
+        }
+
+        private void DisplayScoreboard() {
+            if (scoreboardScene != string.Empty) {
+                UnloadSelfScene();
+                LoadSceneAdditively(scoreboardScene);
+            } else {
+                Debug.LogWarning($"You need to select a scene to load when pressing the Scoreboard-button.");
             }
         }
 
@@ -76,22 +82,6 @@ namespace FG {
         }
 
         /// <summary>
-        /// Hides button from the menu by adding a class to the button
-        /// </summary>
-        /// <param name="element">It can be either Play- or Resume-button</param>
-        private void HideElement(VisualElement element) {
-            element.AddToClassList("hidden");
-        }
-
-        /// <summary>
-        /// Show button from the menu by removing a class from the button
-        /// </summary>
-        /// <param name="element">It can be either Play- or Resume-button</param>
-        private void ShowElement(VisualElement element) {
-            element.RemoveFromClassList("hidden");
-        }
-
-        /// <summary>
         /// Display elements for start menu, and hide everything else
         /// </summary>
         private void DisplayStartSceneMenu() {
@@ -99,6 +89,7 @@ namespace FG {
             HideElement(_pausedText);
             HideElement(_resumeButton);
             ShowElement(_playButton);
+            ShowElement(_scoreboard);
         }
 
         /// <summary>
@@ -109,6 +100,7 @@ namespace FG {
             ShowElement(_pausedText);
             ShowElement(_resumeButton);
             HideElement(_playButton);
+            HideElement(_scoreboard);
         }
 
         /// <summary>
@@ -117,7 +109,7 @@ namespace FG {
         /// Other = Show Resume
         /// </summary>
         private void DisplayCorrectElements() {
-            if (IsFirstScene) {
+            if (IsInStartScene) {
                 DisplayStartSceneMenu();
             }
             else {
@@ -128,49 +120,32 @@ namespace FG {
         /// <summary>
         /// Add click events on the buttons in the menu
         /// </summary>
-        private void InitializeElements() {
-            _rootElement = GetComponent<UIDocument>().rootVisualElement;
+        protected override void InitializeElements() {
+            _rootElement = _document.rootVisualElement;
 
             _overlay = _rootElement.Q<VisualElement>("overlay");
             _pausedText = _rootElement.Q<Label>("pausedText");
             _resumeButton = _rootElement.Q<Button>("resume");
             _playButton = _rootElement.Q<Button>("play");
+            _scoreboard = _rootElement.Q<Button>("scoreboard");
             _quitButton = _rootElement.Q<Button>("quit");
 
-            _resumeButton.RegisterCallback<ClickEvent>(ev => ToggleMenu());
-            _playButton.RegisterCallback<ClickEvent>(ev => StartGame());
-            _quitButton.RegisterCallback<ClickEvent>(ev => QuitApplication());
-
+            _resumeButton.On<ClickEvent>(ev => ToggleMenu());
+            _playButton.On<ClickEvent>(ev => StartGame());
+            _scoreboard.On<ClickEvent>(ev => DisplayScoreboard());
+            _quitButton.On<ClickEvent>(ev => QuitApplication());
+            
             DisplayCorrectElements();
         }
 
         /// <summary>
         /// Cleaning up the click events
         /// </summary>
-        private void RemoveClickEvents() {
-            if (!ReferenceEquals(_resumeButton, null)) {
-                _resumeButton.UnregisterCallback<ClickEvent>(ev => ToggleMenu());
-            }
-
-            if (!ReferenceEquals(_playButton, null)) {
-                _playButton.UnregisterCallback<ClickEvent>(ev => StartGame());
-            }
-
-            if (!ReferenceEquals(_quitButton, null)) {
-                _quitButton.UnregisterCallback<ClickEvent>(ev => QuitApplication());
-            }
-        }
-
-        private void Awake() {
-            InitializeManager();
-        }
-
-        private void OnEnable() {
-            InitializeElements();
-        }
-
-        private void OnDisable() {
-            RemoveClickEvents();
+        protected override void RemoveClickEvents() {
+            _resumeButton.UnregisterCallback<ClickEvent>(ev => ToggleMenu());
+            _playButton.UnregisterCallback<ClickEvent>(ev => StartGame());
+            _scoreboard.UnregisterCallback<ClickEvent>(ev => DisplayScoreboard());
+            _quitButton.UnregisterCallback<ClickEvent>(ev => QuitApplication());
         }
     }
 }

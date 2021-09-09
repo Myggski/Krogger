@@ -1,0 +1,78 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="Highscores.uss" />
+    <ui:VisualElement name="root" class="root" style="padding-bottom: 64px;">
+        <ui:VisualElement name="content-wrapper" class="content-wrapper" style="height: auto;">
+            <ui:Label text="HIGH SCORES" name="high-score-header" class="high-score-header" />
+            <ui:VisualElement name="scores-content" style="margin-bottom: 32px; display: flex; opacity: 0;">
+                <ui:VisualElement name="buttons" class="row-wrapper">
+                    <ui:VisualElement name="button-palceholder" style="width: 90px;" />
+                    <ui:Button text="Name" display-tooltip-when-elided="true" name="name-button" class="sort-button" style="width: 90px; overflow: visible; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; white-space: normal; -unity-text-align: middle-left;">
+                        <ui:VisualElement name="button-text-border" class="button-text-border" style="height: 0;" />
+                    </ui:Button>
+                    <ui:Button text="Score" display-tooltip-when-elided="true" name="score-button" class="sort-button" style="width: 90px; overflow: visible; white-space: normal; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; -unity-text-align: middle-right;">
+                        <ui:VisualElement name="button-text-border" class="button-text-border" style="height: 0; width: 87px;" />
+                    </ui:Button>
+                </ui:VisualElement>
+                <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1">
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player-score" class="row-wrapper player-row">
+                        <ui:Label display-tooltip-when-elided="true" name="player-rank-text" class="player-row-text rank-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-name-text" class="player-row-text name-text" />
+                        <ui:Label display-tooltip-when-elided="true" name="player-score-text" class="player-row-text score-text" />
+                    </ui:VisualElement>
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement name="message-content" style="width: 100%; height: 100%; flex-grow: 1; flex-shrink: 1; flex-basis: auto; align-items: center; justify-content: center; margin-top: 0; position: absolute; left: 0; top: 0; right: 0; bottom: 0;">
+                <ui:Label text="LOADING HIGH SCORES..." display-tooltip-when-elided="true" name="message-text" class="loading-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="action-buttons" style="flex-direction: row; justify-content: space-around; position: relative; bottom: auto; width: 100%; opacity: 1; border-bottom-width: 8px; align-items: auto; flex-shrink: 0;">
+                <ui:Button text="Back to menu" display-tooltip-when-elided="true" name="back-button" class="button" />
+                <ui:Button text="Refresh" display-tooltip-when-elided="true" name="refresh-button" class="button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
