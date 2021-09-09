@@ -7,20 +7,23 @@ using Random = UnityEngine.Random;
 
 public class LevelGenerator : MonoBehaviour
 {
-    [SerializeField] 
-    private GameObject[] trackPieces;
-
     [SerializeField]
     private WeightedTrackPiece[] weightedTracks;
 
     [SerializeField]
     private int maxTrackPieces = 20;
 
+    [SerializeField] 
+    private int startingAmountTracks;
+
+    [SerializeField] 
+    private bool continuousSpawn = true;
+
     private Queue<GameObject> _trackQueue = new Queue<GameObject>();
 
     private Vector3 _spawnPosition = new Vector3(0, 0, 0);
 
-    private int _sumWeights = 0;
+    private int _sumWeights;
 
     private GameObject _lastTrackPiece;
     private GameObject _currentTrackPiece;
@@ -35,19 +38,22 @@ public class LevelGenerator : MonoBehaviour
         }
 
         // Initiate with a chunk of the level already done
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < startingAmountTracks; i++)
         {
             WeightedSpawnNextTrackPiece();
         }
-
-        StartCoroutine(SpawnTracks(2f));
+        
+        if (continuousSpawn)
+        {
+            StartCoroutine(SpawnTracks(2f));
+        }
     }
 
     // Initializes _LastTrackPiece and sets up a safe first row
     // _lastTrackPiece is needed for the method SpawnNextTrackPiece()
     private void SetupSafeStart()
     {
-        _lastTrackPiece = trackPieces[0];
+        _lastTrackPiece = weightedTracks[0].TrackPrefab;
         _currentTrackPiece = Instantiate(_lastTrackPiece, _spawnPosition, Quaternion.identity);
         _trackQueue.Enqueue(_currentTrackPiece);
         // Spawn one additional rows of safe grass
@@ -58,7 +64,7 @@ public class LevelGenerator : MonoBehaviour
     // Could be useful later. 
     private IEnumerator SpawnTracks(float frequency)
     {
-        while (true)
+        while (continuousSpawn)
         {
             yield return new WaitForSeconds(frequency);
             WeightedSpawnNextTrackPiece();
@@ -70,8 +76,8 @@ public class LevelGenerator : MonoBehaviour
     /// </summary>
     public void SpawnNextTrackPiece()
     {
-        int trackIndex = Random.Range(0, trackPieces.Length);
-        _currentTrackPiece = trackPieces[trackIndex];
+        int trackIndex = Random.Range(0, weightedTracks.Length);
+        _currentTrackPiece = weightedTracks[trackIndex].TrackPrefab;
         _spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
         
         _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, Quaternion.identity));
@@ -122,7 +128,7 @@ public class LevelGenerator : MonoBehaviour
 
     public void SpawnNextTrackPiece(int trackIndex)
     {
-        _currentTrackPiece = trackPieces[trackIndex];
+        _currentTrackPiece = weightedTracks[trackIndex].TrackPrefab;
         _spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
         
         _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, Quaternion.identity));
