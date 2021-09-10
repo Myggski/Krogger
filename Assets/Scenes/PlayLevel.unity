@@ -397,8 +397,28 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
+      propertyPath: _shakeSpeed
+      value: 27.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
+      propertyPath: _spawnSpeed
+      value: 6.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
+      propertyPath: _shakeAmount
+      value: 0.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
+      propertyPath: maxTrackPieces
+      value: 21
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
       propertyPath: continuousSpawn
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
+      propertyPath: startingAmountTracks
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
       propertyPath: weightedTracks.Array.data[0]._weight

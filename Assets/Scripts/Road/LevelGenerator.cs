@@ -27,7 +27,15 @@ public class LevelGenerator : MonoBehaviour
 
     private GameObject _lastTrackPiece;
     private GameObject _currentTrackPiece;
+    private GameObject _shakeTrackPiece;
     
+    [SerializeField]
+    private float _shakeSpeed = 1.0f;
+    [SerializeField]
+    private float _shakeAmount  = 1.0f;
+    [SerializeField]
+    private float _spawnSpeed = 5f;
+
     private void Awake()
     {
         SetupSafeStart();
@@ -45,7 +53,7 @@ public class LevelGenerator : MonoBehaviour
         
         if (continuousSpawn)
         {
-            StartCoroutine(SpawnTracks(2f));
+            StartCoroutine(SpawnTracks(_spawnSpeed));
         }
     }
 
@@ -123,6 +131,7 @@ public class LevelGenerator : MonoBehaviour
         if (_trackQueue.Count > maxTrackPieces)
         {
             Destroy(_trackQueue.Dequeue());
+            _shakeTrackPiece = _trackQueue.Peek();
         }
 
         _lastTrackPiece = trackPiecePrefab;
@@ -140,9 +149,21 @@ public class LevelGenerator : MonoBehaviour
         if (_trackQueue.Count > maxTrackPieces)
         {
             Destroy(_trackQueue.Dequeue());
+            _shakeTrackPiece = _trackQueue.Peek();
         }
 
         _lastTrackPiece = _currentTrackPiece;
+    }
+
+    private void Update()
+    {
+        if (!ReferenceEquals(_shakeTrackPiece, null))
+        {
+            var shakeAmount =  Mathf.Sin(Time.time * _shakeSpeed) * _shakeAmount;
+            _shakeTrackPiece.transform.position = new Vector3(_shakeTrackPiece.transform.position.x, shakeAmount,
+                _shakeTrackPiece.transform.position.z);
+        }
+
     }
 
     private void OnDrawGizmos()
