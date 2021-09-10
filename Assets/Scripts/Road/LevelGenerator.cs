@@ -31,9 +31,7 @@ public class LevelGenerator : MonoBehaviour
     private void Awake()
     {
         SetupSafeStart();
-        
-        print("forward: " + transform.forward);
-        
+
         foreach (var track in weightedTracks)
         {
             _sumWeights += track.Weight;
