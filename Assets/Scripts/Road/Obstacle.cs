@@ -29,16 +29,13 @@ public class Obstacle : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    
     private IEnumerator GoBoom(float inSeconds)
     {
-        print("star boom");
         yield return new WaitForSeconds(inSeconds);
-        print("after wait...");
         HideSelfAndAllChildren();
         Instantiate(explosion, transform.position, transform.rotation);
         Destroy(gameObject);
-        //StartCoroutine(DeleteMe(1));
     }
 
     private void HideSelfAndAllChildren()
@@ -64,5 +61,6 @@ public class Obstacle : MonoBehaviour
         {
             StartCoroutine(GoBoom(1));
         }
+        // TODO: if player -> remove 1 score and disable input for X seconds
     }
 }

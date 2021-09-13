@@ -18,6 +18,9 @@ public class LevelGenerator : MonoBehaviour
 
     [SerializeField] 
     private bool continuousSpawn = true;
+    
+    [SerializeField]
+    private float _spawnSpeed = 5f;
 
     private Queue<GameObject> _trackQueue = new Queue<GameObject>();
 
@@ -28,13 +31,13 @@ public class LevelGenerator : MonoBehaviour
     private GameObject _lastTrackPiece;
     private GameObject _currentTrackPiece;
     private GameObject _shakeTrackPiece;
+    private GameObject _sinkingTrackPiece;
     
     [SerializeField]
     private float _shakeSpeed = 1.0f;
     [SerializeField]
     private float _shakeAmount  = 1.0f;
-    [SerializeField]
-    private float _spawnSpeed = 5f;
+    
 
     private void Awake()
     {
@@ -64,6 +67,7 @@ public class LevelGenerator : MonoBehaviour
         _lastTrackPiece = weightedTracks[0].TrackPrefab;
         _currentTrackPiece = Instantiate(_lastTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0));
         _trackQueue.Enqueue(_currentTrackPiece);
+        _shakeTrackPiece = _trackQueue.Peek();
         // Spawn one additional rows of safe grass
         SpawnNextTrackPiece(0);
     }
@@ -130,7 +134,9 @@ public class LevelGenerator : MonoBehaviour
         
         if (_trackQueue.Count > maxTrackPieces)
         {
-            Destroy(_trackQueue.Dequeue());
+            var poppedPiece = _trackQueue.Dequeue();
+            _sinkingTrackPiece = poppedPiece;
+            StartCoroutine(DelayedDestroyTrackPiece(poppedPiece, 2f));
             _shakeTrackPiece = _trackQueue.Peek();
         }
 
@@ -148,11 +154,34 @@ public class LevelGenerator : MonoBehaviour
         
         if (_trackQueue.Count > maxTrackPieces)
         {
-            Destroy(_trackQueue.Dequeue());
+            var poppedPiece = _trackQueue.Dequeue();
+            _sinkingTrackPiece = poppedPiece;
+            DisableTrackPieceSpawn(poppedPiece);
+            StartCoroutine(DelayedDestroyTrackPiece(poppedPiece, 2f));
             _shakeTrackPiece = _trackQueue.Peek();
         }
 
         _lastTrackPiece = _currentTrackPiece;
+    }
+
+    IEnumerator DelayedDestroyTrackPiece(GameObject trackPiece, float inSeconds)
+    {
+        yield return new WaitForSeconds(inSeconds);
+        
+        Destroy(trackPiece);
+        _sinkingTrackPiece = null;
+    }
+
+    private void DisableTrackPieceSpawn(GameObject trackPiece)
+    {
+        var roadTrackComponent = trackPiece.GetComponents<RoadTrack>();
+
+        // check if it's a roadtrack with the component that spawns cars and not
+        // just a grass track
+        if (roadTrackComponent.Length != 0)
+        {
+            roadTrackComponent[0].DisableSpawnPoints();
+        }
     }
 
     private void Update()
@@ -164,7 +193,13 @@ public class LevelGenerator : MonoBehaviour
                 _shakeTrackPiece.transform.position.z);
         }
 
+        if (!ReferenceEquals(_sinkingTrackPiece, null))
+        {
+            _sinkingTrackPiece.transform.position += Vector3.down * 0.1f; 
+        }
+
     }
+    
 
     private void OnDrawGizmos()
     {

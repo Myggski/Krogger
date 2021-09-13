@@ -19,6 +19,14 @@ public class RoadTrack : MonoBehaviour
         }
     }
 
+    public void DisableSpawnPoints()
+    {
+        foreach (var spawnPoint in _spawnPoints)
+        {
+            spawnPoint.active = false;
+        }
+    }
+
     /// <summary>
     /// Coroutine that continually spawns obstacles.
     /// Uses spawnDeviation to add variance to spawn frequency
