@@ -30,7 +30,7 @@ namespace FG {
 
         // Helpers
         private bool IsInStartScene => SceneManager.GetActiveScene().buildIndex == 0;
-        private bool IsActive => !ReferenceEquals(_instance, null) && _instance.gameObject.activeSelf;
+        private bool IsActive => !ReferenceEquals(Instance, null) && Instance.gameObject.activeSelf;
 
         /// <summary>
         /// This is called when the player presses ESC with the new Unity Input System
@@ -48,7 +48,7 @@ namespace FG {
         /// Displaying/hiding menu, when the menu shows, pause the game
         /// </summary>
         private void ToggleMenu() {
-            _instance.gameObject.SetActive(!_instance.gameObject.activeSelf);
+            Instance.gameObject.SetActive(!Instance.gameObject.activeSelf);
             Time.timeScale = IsActive ? 0 : 1;
         }
 
@@ -121,14 +121,16 @@ namespace FG {
         /// Add click events on the buttons in the menu
         /// </summary>
         protected override void InitializeElements() {
-            _rootElement = _document.rootVisualElement;
+            base.InitializeElements();
 
-            _overlay = _rootElement.Q<VisualElement>("overlay");
-            _pausedText = _rootElement.Q<Label>("pausedText");
-            _resumeButton = _rootElement.Q<Button>("resume");
-            _playButton = _rootElement.Q<Button>("play");
-            _scoreboard = _rootElement.Q<Button>("scoreboard");
-            _quitButton = _rootElement.Q<Button>("quit");
+            RootElement = Document.rootVisualElement;
+
+            _overlay = RootElement.Q<VisualElement>("overlay");
+            _pausedText = RootElement.Q<Label>("pausedText");
+            _resumeButton = RootElement.Q<Button>("resume");
+            _playButton = RootElement.Q<Button>("play");
+            _scoreboard = RootElement.Q<Button>("scoreboard");
+            _quitButton = RootElement.Q<Button>("quit");
 
             _resumeButton.On<ClickEvent>(ev => ToggleMenu());
             _playButton.On<ClickEvent>(ev => StartGame());

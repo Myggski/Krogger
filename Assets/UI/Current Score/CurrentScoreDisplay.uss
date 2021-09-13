@@ -1,0 +1,8 @@
+.score-text {
+    -unity-font-definition: url('/Assets/Fonts/Silver.ttf');
+    position: absolute;
+    right: 32px;
+    top: 32px;
+    font-size: 128px;
+    color: rgb(255, 255, 255);
+}

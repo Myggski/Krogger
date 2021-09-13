@@ -138,7 +138,7 @@ namespace FG {
 				
 				_playerScores.AtIndex(i).Q<Label>("player-rank-text").text = GetRankText(highScoreData);
 				_playerScores.AtIndex(i).Q<Label>("player-name-text").text = highScoreData?.Name;
-				_playerScores.AtIndex(i).Q<Label>("player-score-text").text = highScoreData?.Score.ToString();
+				_playerScores.AtIndex(i).Q<Label>("player-score-text").text = $"{highScoreData?.Score}";
 			}
 		}
 
@@ -204,17 +204,19 @@ namespace FG {
 		/// Add click events on the buttons for sorting
 		/// </summary>
 		protected override void InitializeElements() {
-			_rootElement = _document.rootVisualElement;
+			base.InitializeElements();
+
+			RootElement = Document.rootVisualElement;
 
 			// content-wrapper
-			_scoresContent = _rootElement.Q<VisualElement>("scores-content");
+			_scoresContent = RootElement.Q<VisualElement>("scores-content");
 			_contentButtonsWrapper = _scoresContent.Q<VisualElement>("buttons");
 			_nameButton = _contentButtonsWrapper.Q<Button>("name-button");
 			_scoreButton = _contentButtonsWrapper.Q<Button>("score-button");
-			_backButton = _rootElement.Q<Button>("back-button");
-			_refreshButton = _rootElement.Q<Button>("refresh-button");
-			_playerScores = _rootElement.Query<VisualElement>("player-score");
-			_messageContent = _rootElement.Q<VisualElement>("message-content");
+			_backButton = RootElement.Q<Button>("back-button");
+			_refreshButton = RootElement.Q<Button>("refresh-button");
+			_playerScores = RootElement.Query<VisualElement>("player-score");
+			_messageContent = RootElement.Q<VisualElement>("message-content");
 			_messageText = _messageContent.Q<Label>("message-text");
 
 			_nameButton.On<ClickEvent>(ev => SortListBy(HighScoreSortType.Name));
@@ -235,7 +237,7 @@ namespace FG {
 
 		protected override void Awake() {
 			base.Awake();
-
+			
 			Setup();
 		}
 
