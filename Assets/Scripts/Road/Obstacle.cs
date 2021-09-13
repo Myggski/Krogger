@@ -29,6 +29,11 @@ public class Obstacle : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void GoBoomNow()
+    {
+        StartCoroutine(GoBoom(0f));
+    }
     
     private IEnumerator GoBoom(float inSeconds)
     {
@@ -51,7 +56,6 @@ public class Obstacle : MonoBehaviour
     private IEnumerator DeleteMe(float inSeconds)
     {
         yield return new WaitForSeconds(inSeconds);
-        print("byebye");
         Destroy(gameObject);
     }
 

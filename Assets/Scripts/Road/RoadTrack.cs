@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,6 +8,8 @@ public class RoadTrack : MonoBehaviour
     [SerializeField] private SpawnPoint[] _spawnPoints;
 
     [SerializeField] private GameObject[] _obstaclePool;
+
+    private List<GameObject> _spawnedObstacles = new List<GameObject>();
 
     [Range(0, 1.5f)]
     public float spawnDeviation = 1f;
@@ -21,9 +24,17 @@ public class RoadTrack : MonoBehaviour
 
     public void DisableSpawnPoints()
     {
-        foreach (var spawnPoint in _spawnPoints)
+        StopAllCoroutines();
+    }
+
+    public void BoomAllCars()
+    {
+        foreach (var obst in _spawnedObstacles)
         {
-            spawnPoint.active = false;
+            if(obst != null)
+            {
+                obst.GetComponent<Obstacle>().GoBoomNow();
+            }
         }
     }
 
@@ -46,7 +57,7 @@ public class RoadTrack : MonoBehaviour
         {
             yield return new WaitForSeconds(frequency + deviation);
             
-            Instantiate(_obstaclePool[Random.Range(0, _obstaclePool.Length)], spawnTransform.position, spawnTransform.rotation);
+            _spawnedObstacles.Add(Instantiate(_obstaclePool[Random.Range(0, _obstaclePool.Length)], spawnTransform.position, spawnTransform.rotation));
         }
     }
 }

@@ -102,7 +102,7 @@ public class LevelGenerator : MonoBehaviour
         _lastTrackPiece = _currentTrackPiece;
     }
 
-    public void WeightedSpawnNextTrackPiece()
+    private void WeightedSpawnNextTrackPiece()
     {
         // Make sure the array isn't empty
         if (weightedTracks.Length == 0) throw new Exception("WeightedTrackPiece array is empty! Go scream at the devs");
@@ -127,7 +127,6 @@ public class LevelGenerator : MonoBehaviour
     private void SpawnNextTrackPiece(GameObject trackPiecePrefab)
     {
         _currentTrackPiece = trackPiecePrefab;
-        //_spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
         _spawnPosition += transform.forward * ((_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2));
 
         _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0)));
@@ -136,6 +135,7 @@ public class LevelGenerator : MonoBehaviour
         {
             var poppedPiece = _trackQueue.Dequeue();
             _sinkingTrackPiece = poppedPiece;
+            DisableTrackPieceSpawn(poppedPiece);
             StartCoroutine(DelayedDestroyTrackPiece(poppedPiece, 2f));
             _shakeTrackPiece = _trackQueue.Peek();
         }
@@ -143,10 +143,9 @@ public class LevelGenerator : MonoBehaviour
         _lastTrackPiece = trackPiecePrefab;
     }
 
-    public void SpawnNextTrackPiece(int trackIndex)
+    private void SpawnNextTrackPiece(int trackIndex)
     {
         _currentTrackPiece = weightedTracks[trackIndex].TrackPrefab;
-        //_spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
         _spawnPosition += transform.forward * ((_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2));
 
         
@@ -164,7 +163,7 @@ public class LevelGenerator : MonoBehaviour
         _lastTrackPiece = _currentTrackPiece;
     }
 
-    IEnumerator DelayedDestroyTrackPiece(GameObject trackPiece, float inSeconds)
+    private IEnumerator DelayedDestroyTrackPiece(GameObject trackPiece, float inSeconds)
     {
         yield return new WaitForSeconds(inSeconds);
         
@@ -180,7 +179,9 @@ public class LevelGenerator : MonoBehaviour
         // just a grass track
         if (roadTrackComponent.Length != 0)
         {
-            roadTrackComponent[0].DisableSpawnPoints();
+            var road = roadTrackComponent[0];
+            road.DisableSpawnPoints();
+            road.BoomAllCars();
         }
     }
 

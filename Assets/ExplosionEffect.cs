@@ -6,7 +6,7 @@ public class ExplosionEffect : MonoBehaviour
 {
     private Animator _animator;
     // Start is called before the first frame update
-    void Awake()
+    private void Awake()
     {
         _animator = GetComponent<Animator>();
 
@@ -14,7 +14,7 @@ public class ExplosionEffect : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         // normalizedTime greater than 1 means animation is finished
         if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
