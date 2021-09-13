@@ -5,37 +5,20 @@ using UnityEngine.UIElements;
 
 namespace FG {
 	[RequireComponent(typeof(UIDocument))]
-	public abstract class UIManagerBase<T> : MonoBehaviour {
-		// The instance
-		protected static T _instance;
+	public abstract class UIManagerBase<T> : ManagerBase<T> {
 		// The UIToolkit document
-		protected UIDocument _document;
+		protected UIDocument Document;
 		// The root element of the UI
-		protected VisualElement _rootElement;
+		protected VisualElement RootElement;
 		
 		// Scene name where the instance were instantiated 
-		protected string InstanceSceneName => gameObject.scene.name; 
-		
-		/// <summary>
-		/// Making sure that there's only one of this component
-		/// </summary>
-		private void InitializeManager() {
-			if (!ReferenceEquals(_instance, null) && !ReferenceEquals(_instance, this)) {
-				Destroy(gameObject);
-			}
-			else {
-				_instance = (T)Convert.ChangeType(this, typeof(T));
-				_document = GetComponent<UIDocument>();
-			}
-		}
+		private string InstanceSceneName => gameObject.scene.name;
 
 		/// <summary>
-		/// Cleanup the instance when destroyed
+		/// Gets UIDocoument-component
 		/// </summary>
-		private void RemoveInstance() {
-			if (ReferenceEquals((T) Convert.ChangeType(this, typeof(T)), _instance)) {
-				_instance = default;
-			}
+		private void Setup() {
+			Document = GetComponent<UIDocument>();
 		}
 		
 		/// <summary>
@@ -93,9 +76,11 @@ namespace FG {
 		/// Method to override, to remove all the click-listeners and is being called in OnDisable
 		/// </summary>
 		protected virtual void RemoveClickEvents() {}
-		
-		protected virtual void Awake() {
-			InitializeManager();
+
+		protected override void Awake() {
+			base.Awake();
+
+			Setup();
 		}
 
 		protected virtual void OnEnable() {
@@ -104,10 +89,6 @@ namespace FG {
 
 		protected virtual void OnDisable() {
 			RemoveClickEvents();
-		}
-
-		private void OnDestroy() {
-			RemoveInstance();
 		}
 	}
 }

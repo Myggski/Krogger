@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Unity.Plastic.Newtonsoft.Json;
 
 namespace FG {
@@ -10,5 +11,7 @@ namespace FG {
 
 		[JsonProperty("score")]
 		public int Score { get; set; }
+
+		public bool IsValid => Name.Length > 0 && Name.Length <= 6 && Regex.Match(Name, "^\\w+$").Success;
 	}
 }

@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1ef0c405424c0e4d9604f4b7d3b1819, type: 3}
+  m_Name: Current Score
+  m_EditorClassIdentifier: 
+  DeveloperDescription: "This is the current score of the \nplayer, that is being
+    displayed\nand send to the API"
