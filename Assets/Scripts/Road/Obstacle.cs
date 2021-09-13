@@ -32,15 +32,22 @@ public class Obstacle : MonoBehaviour
 
     public void GoBoomNow()
     {
-        StartCoroutine(GoBoom(0f));
-    }
-    
-    private IEnumerator GoBoom(float inSeconds)
-    {
-        yield return new WaitForSeconds(inSeconds);
         HideSelfAndAllChildren();
         Instantiate(explosion, transform.position, transform.rotation);
         Destroy(gameObject);
+    }
+    
+    /// <summary>
+    /// Explodes the car in inSeconds seconds
+    /// Disables meshrenderers in all children and self
+    /// and instantiates an explosion prefab
+    /// </summary>
+    /// <param name="inSeconds"></param>
+    /// <returns></returns>
+    private IEnumerator GoBoom(float inSeconds)
+    {
+        yield return new WaitForSeconds(inSeconds);
+        GoBoomNow();
     }
 
     private void HideSelfAndAllChildren()
@@ -53,18 +60,14 @@ public class Obstacle : MonoBehaviour
         }
     }
 
-    private IEnumerator DeleteMe(float inSeconds)
-    {
-        yield return new WaitForSeconds(inSeconds);
-        Destroy(gameObject);
-    }
-
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag == "car")
+        // TODO: if player -> remove 1 score and disable input for X seconds
+        // TODO: add scoring when car go boom
+        if (other.gameObject.CompareTag("car"))
         {
             StartCoroutine(GoBoom(1));
         }
-        // TODO: if player -> remove 1 score and disable input for X seconds
+        
     }
 }

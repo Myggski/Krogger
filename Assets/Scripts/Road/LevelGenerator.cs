@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using FG;
 using UnityEngine;
+using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
 
 public class LevelGenerator : MonoBehaviour
@@ -15,7 +16,9 @@ public class LevelGenerator : MonoBehaviour
 
     [SerializeField] 
     private int startingAmountTracks;
-
+    
+    [Space(10)]
+    
     [SerializeField] 
     private bool continuousSpawn = true;
     
@@ -33,11 +36,14 @@ public class LevelGenerator : MonoBehaviour
     private GameObject _shakeTrackPiece;
     private GameObject _sinkingTrackPiece;
     
+    [Space(10)]
+    
     [SerializeField]
     private float _shakeSpeed = 1.0f;
     [SerializeField]
     private float _shakeAmount  = 1.0f;
-    
+
+    private const float _sinkSpeed = 0.1f;
 
     private void Awake()
     {
@@ -124,9 +130,15 @@ public class LevelGenerator : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Spawns a trackpiece using the supplied prefab
+    /// </summary>
+    /// <param name="trackPiecePrefab">Roadtrack prefab to be spawned</param>
     private void SpawnNextTrackPiece(GameObject trackPiecePrefab)
     {
         _currentTrackPiece = trackPiecePrefab;
+        
+        // spawns in this objects forward direction
         _spawnPosition += transform.forward * ((_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2));
 
         _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0)));
@@ -143,11 +155,16 @@ public class LevelGenerator : MonoBehaviour
         _lastTrackPiece = trackPiecePrefab;
     }
 
+    /// <summary>
+    /// Spawns a trackpiece using the supplied track index
+    /// </summary>
+    /// <param name="trackIndex"></param>
     private void SpawnNextTrackPiece(int trackIndex)
     {
+        Assert.IsTrue(trackIndex >= 0 && trackIndex < weightedTracks.Length);
+        
         _currentTrackPiece = weightedTracks[trackIndex].TrackPrefab;
         _spawnPosition += transform.forward * ((_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2));
-
         
         _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0)));
         
@@ -168,15 +185,20 @@ public class LevelGenerator : MonoBehaviour
         yield return new WaitForSeconds(inSeconds);
         
         Destroy(trackPiece);
+        // Set _sinkingTrackPiece to null to avoid accessing it later on in update
         _sinkingTrackPiece = null;
     }
 
+    /// <summary>
+    /// Disables trackpiece and booms all cars spawned by it
+    /// </summary>
+    /// <param name="trackPiece"></param>
     private void DisableTrackPieceSpawn(GameObject trackPiece)
     {
         var roadTrackComponent = trackPiece.GetComponents<RoadTrack>();
 
         // check if it's a roadtrack with the component that spawns cars and not
-        // just a grass track
+        // just a grass track (which doesnt have the roadtrack component)
         if (roadTrackComponent.Length != 0)
         {
             var road = roadTrackComponent[0];
@@ -196,19 +218,21 @@ public class LevelGenerator : MonoBehaviour
 
         if (!ReferenceEquals(_sinkingTrackPiece, null))
         {
-            _sinkingTrackPiece.transform.position += Vector3.down * 0.1f; 
+            
+            _sinkingTrackPiece.transform.position += Vector3.down * _sinkSpeed;
         }
 
     }
     
 
+    // Gizmos for helping with how this object is facing
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
         Vector3 direction = transform.TransformDirection(Vector3.forward) * 20;
         Gizmos.DrawRay(transform.position, direction);
         
-        
+        // TODO: fix magic numbers
         Gizmos.color = Color.red;
         Gizmos.matrix = transform.localToWorldMatrix;
         Gizmos.DrawCube(transform.position, new Vector3(60, 1, 3));

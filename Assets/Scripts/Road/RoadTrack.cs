@@ -22,15 +22,22 @@ public class RoadTrack : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Stops spawning of cars by killing all coroutines
+    /// </summary>
     public void DisableSpawnPoints()
     {
         StopAllCoroutines();
     }
 
+    /// <summary>
+    /// Explodes all cars this track has spawned
+    /// </summary>
     public void BoomAllCars()
     {
         foreach (var obst in _spawnedObstacles)
         {
+            // TODO: find a better way maybe? not that performance is an issue...
             if(obst != null)
             {
                 obst.GetComponent<Obstacle>().GoBoomNow();
