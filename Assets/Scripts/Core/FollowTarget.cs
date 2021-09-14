@@ -2,34 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FollowTarget : MonoBehaviour
-{
-    private Transform target;
-
-    [SerializeField] 
+public class FollowTarget : MonoBehaviour {
+    [SerializeField]
     private float followSpeed = 2f;
 
-    private Vector3 targetOffset;
+    private Transform _target;
+    private Vector3 _targetOffset;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        //StartCoroutine(LateStart(1f));
+    private void Start() {
         Invoke(nameof(LateStart), 1f);
     }
 
-    void LateStart()
-    {
-        target = GameObject.FindWithTag("Player").transform;
-        targetOffset = transform.position - target.position;
+    private void LateStart() {
+        _target = GameObject.FindWithTag("Player").transform;
+        _targetOffset = transform.position - _target.position;
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (target)
-        {
-            transform.position = Vector3.Lerp(transform.position, target.position + targetOffset,
+    private void Update() {
+        if (_target) {
+            transform.position = Vector3.Lerp(transform.position, _target.position + _targetOffset,
                 followSpeed * Time.deltaTime);
-        }}
+        }
+    }
 }

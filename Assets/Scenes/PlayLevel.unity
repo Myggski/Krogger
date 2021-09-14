@@ -374,7 +374,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1825621285455089822, guid: 727c859525cf51c4d80ced10f71cbcc7, type: 3}
-  prefabReference: {fileID: 5312322186525602352, guid: f108d511a0355aa44ad76e5a052254ff, type: 3}
 --- !u!4 &905530235
 Transform:
   m_ObjectHideFlags: 0
@@ -397,12 +396,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
+      propertyPath: shakeSpeed
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
       propertyPath: _shakeSpeed
       value: 27.3
       objectReference: {fileID: 0}
     - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
       propertyPath: _spawnSpeed
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
+      propertyPath: shakeAmount
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
       propertyPath: _shakeAmount

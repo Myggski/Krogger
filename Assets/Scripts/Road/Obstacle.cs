@@ -3,28 +3,30 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Obstacle : MonoBehaviour
-{
+public class Obstacle : MonoBehaviour {
     [SerializeField]
-    private float _speed = 5.0f;
+    private float speed = 5.0f;
 
     [SerializeField] 
     private GameObject explosion;
 
     private MeshRenderer _renderer;
     private Rigidbody _rb;
+
+    private const float trackWidth = 60;
     
     private void Awake()
     {
         _renderer = GetComponent<MeshRenderer>();
         _rb = GetComponent<Rigidbody>();
-        _rb.AddForce(transform.forward * _speed);
+        _rb.AddForce(transform.forward * speed);
     }
 
     private void Update()
     {
         var xPos = transform.position.x;
-        if (xPos >= 40 || xPos <= -40)
+        if (xPos >= (trackWidth/2) + 10 ||
+            xPos <= -(trackWidth/2) - 10)
         {
             Destroy(gameObject);
         }

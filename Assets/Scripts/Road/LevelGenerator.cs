@@ -6,26 +6,22 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
 
-public class LevelGenerator : MonoBehaviour
-{
+public class LevelGenerator : MonoBehaviour {
     [SerializeField]
     private WeightedTrackPiece[] weightedTracks;
 
     [SerializeField]
-    private int maxTrackPieces = 20;
+    private int maxTrackPieces = 23;
 
     [SerializeField] 
-    private int startingAmountTracks;
+    private int startingAmountTracks = 20;
     
     [Space(10)]
-    
-    [SerializeField] 
-    private bool continuousSpawn = true;
-    
-    [SerializeField]
-    private float _spawnSpeed = 5f;
 
-    private Queue<GameObject> _trackQueue = new Queue<GameObject>();
+    [SerializeField]
+    private float spawnSpeed = 5f;
+
+    private readonly Queue<GameObject> _trackQueue = new Queue<GameObject>();
 
     private Vector3 _spawnPosition = new Vector3(0, 0, 0);
 
@@ -39,17 +35,17 @@ public class LevelGenerator : MonoBehaviour
     [Space(10)]
     
     [SerializeField]
-    private float _shakeSpeed = 1.0f;
+    private float shakeSpeed = 1.0f;
     [SerializeField]
-    private float _shakeAmount  = 1.0f;
+    private float shakeAmount  = 1.0f;
 
-    private const float _sinkSpeed = 0.1f;
+    private const float SinkSpeed = 0.1f;
 
     private void Awake()
     {
         SetupSafeStart();
 
-        foreach (var track in weightedTracks)
+        foreach (WeightedTrackPiece track in weightedTracks)
         {
             _sumWeights += track.Weight;
         }
@@ -60,10 +56,7 @@ public class LevelGenerator : MonoBehaviour
             WeightedSpawnNextTrackPiece();
         }
         
-        if (continuousSpawn)
-        {
-            StartCoroutine(SpawnTracks(_spawnSpeed));
-        }
+        StartCoroutine(SpawnTracks(spawnSpeed));
     }
 
     // Initializes _LastTrackPiece and sets up a safe first row
@@ -80,38 +73,18 @@ public class LevelGenerator : MonoBehaviour
 
     // Remove this? Used to infinitely spawn tracks every <frequency> seconds
     // Could be useful later. 
-    private IEnumerator SpawnTracks(float frequency)
-    {
-        while (continuousSpawn)
+    private IEnumerator SpawnTracks(float frequency) {
+        while (true)
         {
             yield return new WaitForSeconds(frequency);
             WeightedSpawnNextTrackPiece();
         }
     }
-    
-    /// <summary>
-    /// Spawns the next track piece, and updates the position for the next piece.
-    /// </summary>
-    public void SpawnNextTrackPiece()
-    {
-        int trackIndex = Random.Range(0, weightedTracks.Length);
-        _currentTrackPiece = weightedTracks[trackIndex].TrackPrefab;
-        _spawnPosition.x += (_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2);
-        
-        _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, transform.rotation));
-        
-        if (_trackQueue.Count > maxTrackPieces)
-        {
-            Destroy(_trackQueue.Dequeue());
-        }
-
-        _lastTrackPiece = _currentTrackPiece;
-    }
 
     private void WeightedSpawnNextTrackPiece()
     {
         // Make sure the array isn't empty
-        if (weightedTracks.Length == 0) throw new Exception("WeightedTrackPiece array is empty! Go scream at the devs");
+        if (weightedTracks.Length == 0) Debug.Log("WeightedTrackPiece array is empty! Go scream at the devs");
 
         int roll = Random.Range(0, _sumWeights);
         int currentIndex = 0;
@@ -125,9 +98,6 @@ public class LevelGenerator : MonoBehaviour
                 return;
             }
         }
-
-        throw new Exception("No track could be picked. Go scream at the devs!");
-
     }
 
     /// <summary>
@@ -137,22 +107,7 @@ public class LevelGenerator : MonoBehaviour
     private void SpawnNextTrackPiece(GameObject trackPiecePrefab)
     {
         _currentTrackPiece = trackPiecePrefab;
-        
-        // spawns in this objects forward direction
-        _spawnPosition += transform.forward * ((_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2));
-
-        _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0)));
-        
-        if (_trackQueue.Count > maxTrackPieces)
-        {
-            var poppedPiece = _trackQueue.Dequeue();
-            _sinkingTrackPiece = poppedPiece;
-            DisableTrackPieceSpawn(poppedPiece);
-            StartCoroutine(DelayedDestroyTrackPiece(poppedPiece, 2f));
-            _shakeTrackPiece = _trackQueue.Peek();
-        }
-
-        _lastTrackPiece = trackPiecePrefab;
+        SpawnCurrentPiece();
     }
 
     /// <summary>
@@ -161,18 +116,24 @@ public class LevelGenerator : MonoBehaviour
     /// <param name="trackIndex"></param>
     private void SpawnNextTrackPiece(int trackIndex)
     {
-        Assert.IsTrue(trackIndex >= 0 && trackIndex < weightedTracks.Length);
-        
         _currentTrackPiece = weightedTracks[trackIndex].TrackPrefab;
-        _spawnPosition += transform.forward * ((_lastTrackPiece.transform.localScale.x / 2 ) + (_currentTrackPiece.transform.localScale.x / 2));
-        
-        _trackQueue.Enqueue(Instantiate(_currentTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0)));
-        
+        SpawnCurrentPiece();
+    }
+
+    private void SpawnCurrentPiece()
+    {
+        _spawnPosition += transform.forward *
+                          ((_lastTrackPiece.transform.localScale.x / 2) + (_currentTrackPiece.transform.localScale.x / 2));
+
+        _trackQueue.Enqueue(
+            Instantiate(_currentTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0)));
+
         if (_trackQueue.Count > maxTrackPieces)
         {
             var poppedPiece = _trackQueue.Dequeue();
             _sinkingTrackPiece = poppedPiece;
             DisableTrackPieceSpawn(poppedPiece);
+            // Sinking piece animation, gets destroyed after 2 seconds
             StartCoroutine(DelayedDestroyTrackPiece(poppedPiece, 2f));
             _shakeTrackPiece = _trackQueue.Peek();
         }
@@ -211,20 +172,18 @@ public class LevelGenerator : MonoBehaviour
     {
         if (!ReferenceEquals(_shakeTrackPiece, null))
         {
-            var shakeAmount =  Mathf.Sin(Time.time * _shakeSpeed) * _shakeAmount;
-            _shakeTrackPiece.transform.position = new Vector3(_shakeTrackPiece.transform.position.x, shakeAmount,
+            var shake =  Mathf.Sin(Time.time * shakeSpeed) * shakeAmount;
+            _shakeTrackPiece.transform.position = new Vector3(_shakeTrackPiece.transform.position.x, shake,
                 _shakeTrackPiece.transform.position.z);
         }
 
         if (!ReferenceEquals(_sinkingTrackPiece, null))
         {
             
-            _sinkingTrackPiece.transform.position += Vector3.down * _sinkSpeed;
+            _sinkingTrackPiece.transform.position += Vector3.down * SinkSpeed;
         }
-
     }
     
-
     // Gizmos for helping with how this object is facing
     private void OnDrawGizmos()
     {
