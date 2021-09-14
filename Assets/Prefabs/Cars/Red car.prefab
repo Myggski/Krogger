@@ -446,7 +446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ee22c14ffe7e7946948c91ec716f066, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 429.88
+  speed: 437
   explosion: {fileID: 4401027953183480350, guid: 821586343bfaf5b4a8ec782cc9b6a0c3, type: 3}
 --- !u!64 &3164745866324451635
 MeshCollider:
