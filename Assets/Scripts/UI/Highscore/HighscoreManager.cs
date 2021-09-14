@@ -20,7 +20,7 @@ namespace FG {
 		[SerializeField] 
 		private string loadingMessage = "LOADING HIGH SCORES...";
 		[SerializeField] 
-		private string internalServerErrorMEssage = "Server is down :(";
+		private string internalServerErrorMessage = "Server is down :(";
 		
 		// UI
 		private VisualElement _scoresContent;
@@ -35,7 +35,7 @@ namespace FG {
 		
 		// Data information
 		private bool _ascending;
-		private HighScoreService _highScoreService;
+		private HighScoreService<List<HighScoreData>> _highScoreService;
 		private HighScoreSortType _previousSortType;
 		private List<HighScoreData> _highScoreList;
 		
@@ -98,7 +98,7 @@ namespace FG {
 			DisplayLoading();
 
 			try {
-				HighScoreResponseData responseData = await _highScoreService.GetList();
+				HighScoreResponseData<List<HighScoreData>> responseData = await _highScoreService.GetList();
 
 				if (responseData.Status == (int)HttpStatusCode.OK) {
 					_highScoreList = responseData.Data;
@@ -110,7 +110,7 @@ namespace FG {
 				}
 			}
 			catch {
-				errorMessage = internalServerErrorMEssage;
+				errorMessage = internalServerErrorMessage;
 			}
 			
 			HideLoading(errorMessage);
@@ -194,7 +194,7 @@ namespace FG {
 			_highScoreList = new List<HighScoreData>();
 
 			if (apiUrl != string.Empty) {
-				_highScoreService = new HighScoreService(apiUrl);	
+				_highScoreService = new HighScoreService<List<HighScoreData>>(apiUrl);	
 			} else {
 				Debug.LogWarning("You need to add apiUrl to make an API-request");
 			}

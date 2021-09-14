@@ -5,7 +5,7 @@ namespace FG {
 	/// <summary>
 	/// Request information
 	/// </summary>
-	public class HighScoreResponseData {
+	public class HighScoreResponseData<T> {
 		[JsonProperty("statuscode")]
 		public string StatusCode;
 		
@@ -16,6 +16,6 @@ namespace FG {
 		public string Message;
 		
 		[JsonProperty("data")]
-		public List<HighScoreData> Data;
+		public T Data;
 	}
 }

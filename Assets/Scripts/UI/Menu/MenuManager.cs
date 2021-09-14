@@ -75,13 +75,6 @@ namespace FG {
         }
 
         /// <summary>
-        /// When player clicks on the "Quit"-button, the application quits
-        /// </summary>
-        private void QuitApplication() {
-            Application.Quit();
-        }
-
-        /// <summary>
         /// Display elements for start menu, and hide everything else
         /// </summary>
         private void DisplayStartSceneMenu() {

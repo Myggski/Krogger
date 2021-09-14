@@ -12,6 +12,16 @@ namespace FG {
 		[JsonProperty("score")]
 		public int Score { get; set; }
 
-		public bool IsValid => Name.Length > 0 && Name.Length <= 6 && Regex.Match(Name, "^\\w+$").Success;
+		public bool IsValid => HighScoreValidator.IsNameValid(Name, HighScoreValidator.DEFAULT_NAME_REGEX);
+
+		/// <summary>
+		/// Constructor that sets name and score directly
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="score"></param>
+		public HighScoreData(string name, int score) {
+			Name = name.ToUpper();
+			Score = score;
+		}
 	}
 }

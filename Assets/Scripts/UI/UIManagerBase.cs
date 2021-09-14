@@ -66,6 +66,13 @@ namespace FG {
 		protected void LoadSceneAdditively(string scene) {
 			SceneManager.LoadScene(scene, LoadSceneMode.Additive);
 		}
+		
+		/// <summary>
+		/// When player clicks on the "Quit"-button, the application quits
+		/// </summary>
+		protected void QuitApplication() {
+			Application.Quit();
+		}
 
 		/// <summary>
 		/// Method to override, to set all the elements and is being called in OnEnable

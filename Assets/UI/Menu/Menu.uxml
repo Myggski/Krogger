@@ -2,12 +2,12 @@
     <Style src="Menu.uss" />
     <ui:VisualElement name="root" class="menu-root">
         <ui:VisualElement name="overlay" class="overlay" />
-        <ui:VisualElement name="button-wrapper" class="button-wrapper">
+        <ui:VisualElement name="button-wrapper" class="button-wrapper" style="max-width: 512px;">
             <ui:Label text="[PAUSED]" name="pausedText" class="paused-text" />
-            <ui:Button text="Resume" name="resume" class="button" />
-            <ui:Button text="Play" name="play" class="button" />
-            <ui:Button text="Scoreboard" name="scoreboard" class="button" />
-            <ui:Button text="Quit" name="quit" class="button" />
+            <ui:Button text="Resume" name="resume" class="button" style="max-width: none;" />
+            <ui:Button text="Play" name="play" class="button" style="max-width: none;" />
+            <ui:Button text="Scoreboard" name="scoreboard" class="button" style="max-width: none;" />
+            <ui:Button text="Quit" name="quit" class="button" style="max-width: none;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

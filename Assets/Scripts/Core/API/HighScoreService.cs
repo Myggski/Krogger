@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 namespace FG {
-	public class HighScoreService {
+	public class HighScoreService<T> {
 		/// <summary>
 		/// Url to the API server
 		/// </summary>
@@ -19,7 +19,7 @@ namespace FG {
 		/// Async call to the API to get the list of high scores
 		/// </summary>
 		/// <returns>HighScoreResponseData</returns>
-		public async Task<HighScoreResponseData> GetList() {
+		public async Task<HighScoreResponseData<T>> GetList() {
 			return await DoRequest(RequestType.GET);
 		}
 
@@ -28,9 +28,9 @@ namespace FG {
 		/// </summary>
 		/// <param name="highScoreData">High score that's being saved in the list</param>
 		/// <returns>HighScoreResponseData</returns>
-		public async Task<HighScoreResponseData> SaveScore(HighScoreData highScoreData) {
+		public async Task<HighScoreResponseData<T>> SaveScore(HighScoreData highScoreData) {
 			if (!highScoreData.IsValid) {
-				throw new Exception("The name need to contain letters and digits (between 1-6 characters).");
+				throw new Exception($"The name need to contain letters and digits (between 1-{HighScoreValidator.MAX_LENGTH_NAME} characters).");
 			}
 			
 			return await DoRequest(RequestType.POST, Encryption.Encrypt(JsonConvert.SerializeObject(highScoreData)));
@@ -42,26 +42,32 @@ namespace FG {
 		/// <param name="requestType">GET- / POST-request</param>
 		/// <param name="serializedData">Only for POST-request (Saving Score)</param>
 		/// <returns></returns>
-		private async Task<HighScoreResponseData> DoRequest(RequestType requestType, string serializedData = "") {
+		private async Task<HighScoreResponseData<T>> DoRequest(RequestType requestType, string serializedData = "") {
 			UnityWebRequest request;
 
 			if (requestType == RequestType.POST) {
-				request = UnityWebRequest.Post(_apiUrl, serializedData);
+				WWWForm form = new WWWForm();
+				form.AddField("data", serializedData);
+
+				request = UnityWebRequest.Post(_apiUrl, form);
 			} else {
 				request = UnityWebRequest.Get(_apiUrl);
 			}
-			
-			request.SetRequestHeader("Content-Type", "application/json");
+
 			UnityWebRequestAsyncOperation requestOperation = request.SendWebRequest();
-			
+
 			while (!requestOperation.isDone) {
 				await Task.Yield();
 			}
 			
 			if (request.result == UnityWebRequest.Result.Success) {;
-				return JsonConvert.DeserializeObject<HighScoreResponseData>(Encryption.Decrypt(request.downloadHandler.text));
+				string decryptedString = Encryption.Decrypt(request.downloadHandler.text);
+				
+				request.Dispose();
+				return JsonConvert.DeserializeObject<HighScoreResponseData<T>>(decryptedString);
 			}
 			
+			request.Dispose();
 			throw new Exception("Something went wrong when trying to interact with the API.");
 		}
 	}
