@@ -63,10 +63,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94ea555a1bf27be42b85bb87c24c6836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 10.73
-  movementStepsInUnits: 2
+  movementSpeed: 11
+  movementStepsInUnits: 3
   jumpAnimationTriggerName: Jump
   animator: {fileID: 5149170031889063904}
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!65 &1825621285455089817
 BoxCollider:
   m_ObjectHideFlags: 0

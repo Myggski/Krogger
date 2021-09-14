@@ -1,18 +1,14 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using FG;
 using UnityEngine;
-using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
 
 public class LevelGenerator : MonoBehaviour {
     [SerializeField]
     private WeightedTrackPiece[] weightedTracks;
-
     [SerializeField]
     private int maxTrackPieces = 23;
-
     [SerializeField] 
     private int startingAmountTracks = 20;
     
@@ -20,17 +16,6 @@ public class LevelGenerator : MonoBehaviour {
 
     [SerializeField]
     private float spawnSpeed = 5f;
-
-    private readonly Queue<GameObject> _trackQueue = new Queue<GameObject>();
-
-    private Vector3 _spawnPosition = new Vector3(0, 0, 0);
-
-    private int _sumWeights;
-
-    private GameObject _lastTrackPiece;
-    private GameObject _currentTrackPiece;
-    private GameObject _shakeTrackPiece;
-    private GameObject _sinkingTrackPiece;
     
     [Space(10)]
     
@@ -39,10 +24,18 @@ public class LevelGenerator : MonoBehaviour {
     [SerializeField]
     private float shakeAmount  = 1.0f;
 
-    private const float SinkSpeed = 0.1f;
+    private int _sumWeights;
+    private readonly Queue<GameObject> _trackQueue = new Queue<GameObject>();
+    private Vector3 _spawnPosition = new Vector3(0, 0, 0);
+    private GameObject _lastTrackPiece;
+    private GameObject _currentTrackPiece;
+    private GameObject _shakeTrackPiece;
+    private GameObject _sinkingTrackPiece;
+    
+    private const float SINK_SPEED = 0.1f;
+    public GameObject FirstTrack => _trackQueue.Peek();
 
-    private void Awake()
-    {
+    protected void Awake() {
         SetupSafeStart();
 
         foreach (WeightedTrackPiece track in weightedTracks)
@@ -59,7 +52,7 @@ public class LevelGenerator : MonoBehaviour {
         StartCoroutine(SpawnTracks(spawnSpeed));
     }
 
-    // Initializes _LastTrackPiece and sets up a safe first row
+    // Initializes _lastTrackPiece and sets up a safe first row
     // _lastTrackPiece is needed for the method SpawnNextTrackPiece()
     private void SetupSafeStart()
     {
@@ -67,6 +60,13 @@ public class LevelGenerator : MonoBehaviour {
         _currentTrackPiece = Instantiate(_lastTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0));
         _trackQueue.Enqueue(_currentTrackPiece);
         _shakeTrackPiece = _trackQueue.Peek();
+        
+        // Removes component that adds obstacles on the safe spawn point
+        ObstacleSpawner obstacleSpawner = _shakeTrackPiece.GetComponent<ObstacleSpawner>();
+        if (!ReferenceEquals(obstacleSpawner, null)) {
+            Destroy(obstacleSpawner);    
+        }
+        
         // Spawn one additional rows of safe grass
         SpawnNextTrackPiece(0);
     }
@@ -180,7 +180,7 @@ public class LevelGenerator : MonoBehaviour {
         if (!ReferenceEquals(_sinkingTrackPiece, null))
         {
             
-            _sinkingTrackPiece.transform.position += Vector3.down * SinkSpeed;
+            _sinkingTrackPiece.transform.position += Vector3.down * SINK_SPEED;
         }
     }
     
