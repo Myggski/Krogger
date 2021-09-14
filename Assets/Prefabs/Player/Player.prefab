@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 9144917138797481687}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63,10 +63,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94ea555a1bf27be42b85bb87c24c6836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeed: 20
-  _movementStepsInUnits: 5
-  _jumpAnimationTriggerName: Jump
-  _animator: {fileID: 5149170031889063904}
+  movementSpeed: 10.73
+  movementStepsInUnits: 2
+  jumpAnimationTriggerName: Jump
+  animator: {fileID: 5149170031889063904}
 --- !u!65 &1825621285455089817
 BoxCollider:
   m_ObjectHideFlags: 0
