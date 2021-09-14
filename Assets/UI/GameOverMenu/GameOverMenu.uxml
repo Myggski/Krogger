@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="GameOverMenu.uss" />
+    <ui:VisualElement name="root" class="root" style="padding-bottom: 64px; border-top-left-radius: 6px; border-bottom-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-top-width: 0; margin-top: 0;">
+        <ui:VisualElement name="content-wrapper" class="content-wrapper" style="height: auto; align-items: center; justify-content: flex-start;">
+            <ui:Label text="GAME OVER" name="game-over-header" class="game-over-header" style="padding-bottom: 0; border-bottom-width: 0; margin-bottom: 0;" />
+            <ui:Label text="TOTAL SCORE: 0" name="game-over-sub-header" class="game-over-sub-header" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; -unity-text-align: upper-center; font-size: 80px; width: 100%; margin-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0;" />
+            <ui:VisualElement name="form" style="justify-content: flex-end; align-items: flex-start; max-width: 480px; margin-bottom: 32px; width: 480px;">
+                <ui:Label text="ENTER NAME (1-12 CHARACTERS):" name="game-over-input-text" class="game-over-sub-header" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; font-size: 48px; width: 100%; -unity-text-align: upper-left; margin-top: 0; margin-bottom: -16px;" />
+                <ui:VisualElement name="input-wrapper" style="flex-direction: row; margin-bottom: 8px; width: 100%;">
+                    <ui:TextField picking-mode="Ignore" is-delayed="false" name="name-input" class="input" style="overflow: hidden; align-items: auto; min-width: auto; max-width: none;" />
+                    <ui:Button text="Submit" display-tooltip-when-elided="true" name="submit-button" enable-rich-text="true" class="button" style="margin-bottom: 0; max-width: none; flex-shrink: 1; border-top-left-radius: 0; border-bottom-left-radius: 0; flex-grow: 0; width: 64%;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="message-content">
+                    <ui:Label display-tooltip-when-elided="true" name="message-text" class="loading-text" style="-unity-text-align: upper-left;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="button-wrapper" class="button-wrapper" style="max-width: 480px; max-height: none; min-width: auto; width: 480%; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+                <ui:Button text="Play again" name="play-again-button" class="button" style="max-width: none;" />
+                <ui:Button text="Back to menu" name="back-to-menu-button" class="button" style="max-width: none;" />
+                <ui:Button text="Quit" name="quit-button" class="button" style="max-width: none; margin-bottom: 16px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

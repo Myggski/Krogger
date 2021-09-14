@@ -32,7 +32,7 @@ namespace FG {
 		/// This method will be called by an IntEvent.
 		/// </summary>
 		public void ResetScore() {
-			currentScore.Value = 0f;
+			currentScore.Value = 0;
 		}
 	}
 }
