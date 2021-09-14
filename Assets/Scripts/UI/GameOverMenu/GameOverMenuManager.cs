@@ -51,7 +51,6 @@ namespace FG {
 
 		/// <summary>
 		/// Sets the success/error-message in the UI
-		/// Also enables the input-field and submit-button if it's an error message
 		/// </summary>
 		/// <param name="message">success/error-message</param>
 		/// <param name="messageType">What time of message, if it's a success or a error message</param>
@@ -67,7 +66,7 @@ namespace FG {
 		}
 
 		/// <summary>
-		/// Validate input without checking regex, just the length of the characters
+		/// Validate input with regex, and the length of the characters
 		/// </summary>
 		/// <param name="ev"></param>
 		private void ValidateInput(InputEvent ev) {
@@ -84,7 +83,7 @@ namespace FG {
 				}
 			}
 			else {
-				SetMessage(String.Empty);
+				SetMessage(string.Empty);
 			}
 
 			_submitButton.SetEnabled(isNameValid);
