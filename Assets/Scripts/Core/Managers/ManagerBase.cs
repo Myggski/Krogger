@@ -4,7 +4,7 @@ using UnityEngine;
 namespace FG {
     public abstract class ManagerBase<T> : MonoBehaviour {
         // The instance
-        protected static T Instance;
+        public static T Instance;
 
         /// <summary>
         /// Making sure that there's only one of this component

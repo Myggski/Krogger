@@ -63,16 +63,19 @@ namespace FG {
 		/// <param name="nextDirection"></param>
 		private void QueueNewDirection(Vector3 nextDirection) {
 			Vector3 newPosition = Vector3.zero;
+			bool newMovementHasBeenAdded = false;
 			
 			if (HasQueuedMovements && HasSpotsLeftInMovementQueue) {
 				newPosition = LastDirection + nextDirection * movementStepsInUnits;
+				newMovementHasBeenAdded = true;
 			} else if (!HasQueuedMovements) {
 				Vector3 currentPosition = new Vector3(_currentPosition.x, _transform.position.y, _currentPosition.z);
 				newPosition = currentPosition + (nextDirection * movementStepsInUnits);
+				newMovementHasBeenAdded = true;
 			}
 
 			// If it's a tree ahead, don't queue the movement
-			if (IsNextPositionValid(newPosition)) {
+			if (IsNextPositionValid(newPosition) && newMovementHasBeenAdded) {
 				_queuedMovements.Add(newPosition);	
 
 				// If the first direction is the same as the newly added, call SetupNewMovement
@@ -117,7 +120,9 @@ namespace FG {
 			_transform.position = Vector3.MoveTowards(_transform.position, NextDirection, (movementSpeed * _queuedMovements.Count) * Time.deltaTime);
 			_transform.rotation = Quaternion.RotateTowards(_transform.rotation,Quaternion.LookRotation((NextDirection - _currentPosition).normalized), Time.deltaTime * (_rotationAngle / (1 / movementSpeed * movementStepsInUnits)));
 
+			// Player has reached the new position 
 			if (_transform.position == NextDirection) {
+				LevelGenerator.Instance.TrySpawnTrack(_currentPosition);
 				ResetMovementInfo();
 			}
 		}
