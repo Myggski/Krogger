@@ -160,13 +160,13 @@ public class LevelGenerator : ManagerBase<LevelGenerator> {
             Instantiate(_currentTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0)));
 
         if (_trackQueue.Count > maxTrackPieces) {
-            var poppedPiece = _trackQueue.FirstOrDefault();
+            var poppedPiece = _trackQueue.First();
             _trackQueue.RemoveFirst();
             _sinkingTrackPiece = poppedPiece;
             DisableTrackPieceSpawn(poppedPiece);
             // Sinking piece animation, gets destroyed after 2 seconds
             StartCoroutine(DelayedDestroyTrackPiece(poppedPiece, 2f));
-            _shakeTrackPiece = _trackQueue.FirstOrDefault();
+            _shakeTrackPiece = _trackQueue.First();
         }
 
         _lastTrackPiece = _currentTrackPiece;
