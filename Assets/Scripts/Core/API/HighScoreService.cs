@@ -60,7 +60,7 @@ namespace FG {
 				await Task.Yield();
 			}
 			
-			if (request.result == UnityWebRequest.Result.Success) {;
+			if (request.result == UnityWebRequest.Result.Success) {
 				string decryptedString = Encryption.Decrypt(request.downloadHandler.text);
 				
 				request.Dispose();

@@ -25,6 +25,18 @@ public class ObstacleSpawner : MonoBehaviour {
     private List<GameObject> _placedGameObject;
 
     /// <summary>
+    /// Removes obstacles to make it more safe
+    /// </summary>
+    public void InitializeSafeMode() {
+        int amountToRemove = Random.Range(minToSpawn, maxToSpawn);
+        amountToRemove = Mathf.Clamp(amountToRemove, 0, _placedGameObject.Count);
+
+        for (int i = 0; i < amountToRemove; i++) {
+            Destroy(_placedGameObject[i]);
+        }
+    }
+
+    /// <summary>
     /// Returns random GameObject from list
     /// </summary>
     /// <returns></returns>

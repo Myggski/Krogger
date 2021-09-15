@@ -3,33 +3,39 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Obstacle : MonoBehaviour {
-    [SerializeField]
-    private float speed = 5.0f;
+public class MovingObstacle : MonoBehaviour {
+    private float _speed = 5.0f;
+    private float _trackWidth = 60f;
 
     [SerializeField] 
     private GameObject explosion;
 
     private MeshRenderer _renderer;
     private Rigidbody _rb;
-
-    private const float trackWidth = 60;
     
     private void Awake()
     {
         _renderer = GetComponent<MeshRenderer>();
         _rb = GetComponent<Rigidbody>();
-        _rb.AddForce(transform.forward * speed);
+    }
+
+    private void Start() {
+        _rb.AddForce(transform.forward * _speed);
     }
 
     private void Update()
     {
         var xPos = transform.position.x;
-        if (xPos >= (trackWidth/2) + 10 ||
-            xPos <= -(trackWidth/2) - 10)
+        if (xPos >= (_trackWidth/2) + 10 ||
+            xPos <= -(_trackWidth/2) - 10)
         {
             Destroy(gameObject);
         }
+    }
+
+    public void Initialize(float speed, float trackWidth) {
+        _speed = speed;
+        _trackWidth = trackWidth;
     }
 
     public void GoBoomNow()

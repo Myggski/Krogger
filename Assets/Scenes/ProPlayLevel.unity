@@ -417,15 +417,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
       propertyPath: maxTrackPieces
-      value: 22
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
       propertyPath: continuousSpawn
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
+      propertyPath: numberOfSafeTracks
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
       propertyPath: startingAmountTracks
-      value: 19
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 6439853484842327050, guid: 1287129ed56f9cf48ba2d3a4b4112301, type: 3}
       propertyPath: weightedTracks.Array.size

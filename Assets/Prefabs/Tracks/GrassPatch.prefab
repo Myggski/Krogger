@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minToSpawn: 6
-  maxToSpawn: 16
+  maxToSpawn: 12
   gameObjectPlacedPerUnit: 3
   prefabsToSpawn:
   - {fileID: 8704744048329155450, guid: 3411407d815235844b98310c5983e148, type: 3}
