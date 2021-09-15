@@ -18,6 +18,10 @@ namespace FG {
 
 		[SerializeField]
 		private Animator animator;
+
+		[SerializeField]
+		[Tooltip("The layer where the obstacles are, for optimization.")]
+		private LayerMask obstacleLayerMask = 1 << 6;
 		
 		// Data information
 		private float _rotationAngle;
@@ -43,18 +47,38 @@ namespace FG {
 		}
 
 		/// <summary>
+		/// Checks if the next position doesn't contains any obstacles
+		/// </summary>
+		/// <param name="nextPosition">The next position that the player wants to move to</param>
+		/// <returns></returns>
+		private bool IsNextPositionValid(Vector3 nextPosition) {
+			Collider[] obstacle = new Collider[1];
+			Physics.OverlapSphereNonAlloc(nextPosition, movementStepsInUnits / 4, obstacle, obstacleLayerMask);
+			return ReferenceEquals(obstacle[0], null);
+		}
+
+		/// <summary>
 		/// Queues movement directions for movements smoothness
 		/// </summary>
 		/// <param name="nextDirection"></param>
 		private void QueueNewDirection(Vector3 nextDirection) {
+			Vector3 newPosition = Vector3.zero;
+			
 			if (HasQueuedMovements && HasSpotsLeftInMovementQueue) {
-				_queuedMovements.Add(LastDirection + nextDirection * movementStepsInUnits);
-			}
-			else if (!HasQueuedMovements) {
+				newPosition = LastDirection + nextDirection * movementStepsInUnits;
+			} else if (!HasQueuedMovements) {
 				Vector3 currentPosition = new Vector3(_currentPosition.x, _transform.position.y, _currentPosition.z);
-				_queuedMovements.Add(currentPosition + (nextDirection * movementStepsInUnits));
+				newPosition = currentPosition + (nextDirection * movementStepsInUnits);
+			}
 
-				SetupNewMovement();
+			// If it's a tree ahead, don't queue the movement
+			if (IsNextPositionValid(newPosition)) {
+				_queuedMovements.Add(newPosition);	
+
+				// If the first direction is the same as the newly added, call SetupNewMovement
+				if (NextDirection.Equals(newPosition)) {
+					SetupNewMovement();
+				}				
 			}
 		}
 		

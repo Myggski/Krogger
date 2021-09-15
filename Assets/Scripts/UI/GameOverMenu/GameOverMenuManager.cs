@@ -111,7 +111,7 @@ namespace FG {
 				} else {
 					SetMessage(responseData.Message);
 				}
-			} catch(Exception ex) {
+			} catch {
 				SetMessage(internalServerErrorMessage);
 			} finally {
 				// Setting the UI in "done"-mode depending on the end result
