@@ -55,10 +55,10 @@ public class RoadTrack : MonoBehaviour {
 
         // The reason we don't use Transform as a parameter is because of this bool:
         while (spawnPoint.active) {
-            yield return new WaitForSeconds(frequency + deviation);
-
             _spawnedObstacles.Add(Instantiate(obstaclePool[Random.Range(0, obstaclePool.Length)],
                 spawnTransform.position, spawnTransform.rotation));
+
+            yield return new WaitForSeconds(frequency + deviation);
         }
     }
 }
