@@ -57,7 +57,7 @@ public class LevelGenerator : ManagerBase<LevelGenerator> {
     }
 
     /// <summary>
-    /// Trying to spawn a track depending on  
+    /// Trying to spawn a track depending on the distance between gameObjectPosition and the last track position
     /// </summary>
     /// <param name="gameObjectPosition">Some sort of position of a gameObject, example the player</param>
     public void TrySpawnTrack(Vector3 gameObjectPosition) {
