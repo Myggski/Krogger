@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using FG;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class LevelGenerator : MonoBehaviour {
+public class LevelGenerator : ManagerBase<LevelGenerator> {
     [SerializeField]
     private WeightedTrackPiece[] weightedTracks;
     [SerializeField]
     private int maxTrackPieces = 23;
     [SerializeField] 
     private int startingAmountTracks = 20;
+    [SerializeField]
+    [Tooltip("How close a gameObject (player) has to be to the last piece")]
+    private int minSpawnDistance = 30;
     
     [Space(10)]
 
@@ -25,30 +29,58 @@ public class LevelGenerator : MonoBehaviour {
     private float shakeAmount  = 1.0f;
 
     private int _sumWeights;
-    private readonly Queue<GameObject> _trackQueue = new Queue<GameObject>();
+    private readonly LinkedList<GameObject> _trackQueue = new LinkedList<GameObject>();
     private Vector3 _spawnPosition = new Vector3(0, 0, 0);
     private GameObject _lastTrackPiece;
     private GameObject _currentTrackPiece;
     private GameObject _shakeTrackPiece;
     private GameObject _sinkingTrackPiece;
+    private Coroutine _spawnTrackCoroutine;
     
     private const float SINK_SPEED = 0.1f;
 
-    protected void Awake() {
+    protected override void Awake() {
+        base.Awake();
+
         SetupSafeStart();
 
-        foreach (WeightedTrackPiece track in weightedTracks)
-        {
+        foreach (WeightedTrackPiece track in weightedTracks) {
             _sumWeights += track.Weight;
         }
 
         // Initiate with a chunk of the level already done
-        for (int i = 0; i < startingAmountTracks; i++)
-        {
+        for (int i = 0; i < startingAmountTracks; i++) {
             WeightedSpawnNextTrackPiece();
         }
-        
-        StartCoroutine(SpawnTracks(spawnSpeed));
+
+        StartSpawningTracks();
+    }
+
+    /// <summary>
+    /// Trying to spawn a track depending on the distance between gameObjectPosition and the last track position
+    /// </summary>
+    /// <param name="gameObjectPosition">Some sort of position of a gameObject, example the player</param>
+    public void TrySpawnTrack(Vector3 gameObjectPosition) {
+        if (!_trackQueue.Any()) {
+            Debug.LogWarning("No track could be found.");
+            return;
+        } 
+
+        // We only care about the distance between the z-positions
+        Vector3 checkPosition = new Vector3(0, 0, gameObjectPosition.z);
+        Vector3 trackPosition = new Vector3(0, 0, _trackQueue.Last().transform.position.z);
+
+        if (Vector3.Distance(checkPosition, trackPosition) < minSpawnDistance) {
+            StartSpawningTracks();
+        }
+    }
+
+    private void StartSpawningTracks() {
+        if (!ReferenceEquals(_spawnTrackCoroutine, null)) {
+            StopCoroutine(_spawnTrackCoroutine);
+        }
+
+        _spawnTrackCoroutine = StartCoroutine(SpawnTracks(spawnSpeed));
     }
 
     // Initializes _lastTrackPiece and sets up a safe first row
@@ -57,8 +89,8 @@ public class LevelGenerator : MonoBehaviour {
     {
         _lastTrackPiece = weightedTracks[0].TrackPrefab;
         _currentTrackPiece = Instantiate(_lastTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0));
-        _trackQueue.Enqueue(_currentTrackPiece);
-        _shakeTrackPiece = _trackQueue.Peek();
+        _trackQueue.AddLast(_currentTrackPiece);
+        _shakeTrackPiece = _trackQueue.First();
         
         // Removes component that adds obstacles on the safe spawn point
         ObstacleSpawner obstacleSpawner = _shakeTrackPiece.GetComponent<ObstacleSpawner>();
@@ -73,26 +105,26 @@ public class LevelGenerator : MonoBehaviour {
     // Remove this? Used to infinitely spawn tracks every <frequency> seconds
     // Could be useful later. 
     private IEnumerator SpawnTracks(float frequency) {
-        while (true)
-        {
-            yield return new WaitForSeconds(frequency);
+        while (true) {
             WeightedSpawnNextTrackPiece();
+            yield return new WaitForSeconds(frequency);
         }
     }
 
     private void WeightedSpawnNextTrackPiece()
     {
-        // Make sure the array isn't empty
-        if (weightedTracks.Length == 0) Debug.Log("WeightedTrackPiece array is empty! Go scream at the devs");
+        // Gives warning if array is empty
+        if (weightedTracks.Length == 0) {
+            Debug.Log("WeightedTrackPiece array is empty! Go scream at the devs");
+        }
 
         int roll = Random.Range(0, _sumWeights);
         int currentIndex = 0;
 
-        foreach (var trackPiece in weightedTracks)
-        {
+        foreach (var trackPiece in weightedTracks) {
             currentIndex += trackPiece.Weight;
-            if (roll < currentIndex)
-            {
+
+            if (roll < currentIndex) {
                 SpawnNextTrackPiece(trackPiece.TrackPrefab);
                 return;
             }
@@ -124,17 +156,17 @@ public class LevelGenerator : MonoBehaviour {
         _spawnPosition += transform.forward *
                           ((_lastTrackPiece.transform.localScale.x / 2) + (_currentTrackPiece.transform.localScale.x / 2));
 
-        _trackQueue.Enqueue(
+        _trackQueue.AddLast(
             Instantiate(_currentTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0)));
 
-        if (_trackQueue.Count > maxTrackPieces)
-        {
-            var poppedPiece = _trackQueue.Dequeue();
+        if (_trackQueue.Count > maxTrackPieces) {
+            var poppedPiece = _trackQueue.First();
+            _trackQueue.RemoveFirst();
             _sinkingTrackPiece = poppedPiece;
             DisableTrackPieceSpawn(poppedPiece);
             // Sinking piece animation, gets destroyed after 2 seconds
             StartCoroutine(DelayedDestroyTrackPiece(poppedPiece, 2f));
-            _shakeTrackPiece = _trackQueue.Peek();
+            _shakeTrackPiece = _trackQueue.First();
         }
 
         _lastTrackPiece = _currentTrackPiece;
@@ -159,8 +191,7 @@ public class LevelGenerator : MonoBehaviour {
 
         // check if it's a roadtrack with the component that spawns cars and not
         // just a grass track (which doesnt have the roadtrack component)
-        if (roadTrackComponent.Length != 0)
-        {
+        if (roadTrackComponent.Length != 0) {
             var road = roadTrackComponent[0];
             road.DisableSpawnPoints();
             road.BoomAllCars();
@@ -169,15 +200,13 @@ public class LevelGenerator : MonoBehaviour {
 
     private void Update()
     {
-        if (!ReferenceEquals(_shakeTrackPiece, null))
-        {
+        if (!ReferenceEquals(_shakeTrackPiece, null)) {
             var shake =  Mathf.Sin(Time.time * shakeSpeed) * shakeAmount;
             _shakeTrackPiece.transform.position = new Vector3(_shakeTrackPiece.transform.position.x, shake,
                 _shakeTrackPiece.transform.position.z);
         }
 
-        if (!ReferenceEquals(_sinkingTrackPiece, null))
-        {
+        if (!ReferenceEquals(_sinkingTrackPiece, null)) {
             
             _sinkingTrackPiece.transform.position += Vector3.down * SINK_SPEED;
         }
