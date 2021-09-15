@@ -24,6 +24,8 @@ public class FollowTarget : MonoBehaviour {
         if (_target) {
             transform.position = Vector3.Lerp(transform.position, _target.position + _targetOffset,
                 followSpeed * Time.deltaTime);
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, -6f, 6f), transform.position.y,
+                transform.position.z);
         }
     }
 }
