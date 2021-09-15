@@ -33,7 +33,6 @@ public class LevelGenerator : MonoBehaviour {
     private GameObject _sinkingTrackPiece;
     
     private const float SINK_SPEED = 0.1f;
-    public GameObject FirstTrack => _trackQueue.Peek();
 
     protected void Awake() {
         SetupSafeStart();

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -20,7 +22,7 @@ public class ObstacleSpawner : MonoBehaviour {
     // Data information
     private int _maxPositionZ;
     private Transform _parentTransform;
-    private List<Vector3> _placedGameObjectPositions;
+    private List<GameObject> _placedGameObject;
 
     /// <summary>
     /// Returns random GameObject from list
@@ -38,8 +40,8 @@ public class ObstacleSpawner : MonoBehaviour {
         // Can spawn in x-position from -30 to 30, and removes gameObjectPlacedPerUnit on both sides for some padding
         // Else half the trees at the edges spawns outside of the map  
         int randomXPosition = Random.Range(-_maxPositionZ + gameObjectPlacedPerUnit, _maxPositionZ - gameObjectPlacedPerUnit + 1);
-        bool isPositionInList = _placedGameObjectPositions
-            .Exists(position => position.z.Equals(randomXPosition));
+        bool isPositionInList = _placedGameObject
+            .Exists(obstacle => obstacle.transform.position.z.Equals(randomXPosition));
 
         if (randomXPosition % gameObjectPlacedPerUnit == 0 && !isPositionInList) {
             return randomXPosition;
@@ -63,7 +65,7 @@ public class ObstacleSpawner : MonoBehaviour {
     private void InitializeSpawning() {
         _parentTransform = transform;
         _maxPositionZ = Mathf.RoundToInt(_parentTransform.localScale.z / 2f);
-        _placedGameObjectPositions = new List<Vector3>();
+        _placedGameObject = new List<GameObject>();
 
         SpawnObjects();
     }
@@ -76,13 +78,26 @@ public class ObstacleSpawner : MonoBehaviour {
         
         for (int i = 0; i < numberOfObjectsToSpawn; i++) {
             Vector3 gameObjectPosition = GetRandomSpawningPosition();
-            _placedGameObjectPositions.Add(gameObjectPosition);
-
             GameObject spawnedObject = Instantiate(GetRandomObject(), gameObjectPosition, _parentTransform.rotation);
+
+            _placedGameObject.Add(spawnedObject);
         }
     }
 
-    private void Start() {
+    /// <summary>
+    /// Removes all the obstacles that has been spawned
+    /// </summary>
+    private void TrackCleanup() {
+        if (_placedGameObject.Any()) {
+            _placedGameObject.ForEach(Destroy);    
+        }
+    }
+
+    private void Awake() {
         InitializeSpawning();
+    }
+
+    private void OnDestroy() {
+        TrackCleanup();
     }
 }
