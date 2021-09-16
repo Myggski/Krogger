@@ -54,7 +54,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7594853750308088665}
-  - component: {fileID: 7594853750308088666}
+  - component: {fileID: 2162546704871763797}
   m_Layer: 0
   m_Name: RiverTrackSingle
   m_TagString: Untagged
@@ -79,7 +79,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7594853750308088666
+--- !u!114 &2162546704871763797
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,15 +88,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7594853750308088664}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7898464774194b046be4d7517f893597, type: 3}
+  m_Script: {fileID: 11500000, guid: e81e53159ab5e0241b3ace77f15b1fe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnPoints:
-  - {fileID: 7594853750492104402}
-  - {fileID: 7594853749989376435}
-  _obstaclePool:
-  - {fileID: 121994793929710636, guid: ca5fe185fa4f2b1468ea3c491279a5e1, type: 3}
-  spawnDeviation: 0.82
+  logPrefab: {fileID: 0}
+  maxLogs: 4
+  isDoubleLane: 0
 --- !u!1 &7594853750492104400
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,6 +192,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1

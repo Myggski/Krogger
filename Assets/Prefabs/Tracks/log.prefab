@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4766336334352091669}
   - component: {fileID: 4766336334352091668}
   - component: {fileID: 4766336334352092138}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: log
-  m_TagString: Untagged
+  m_TagString: obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75b3f7b5dba783e409e5da952f4d556d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSize: 0
+  maxSize: 6
   shakeSpeed: 33.07
   shakeAmount: 0.03
 --- !u!65 &4766336334352092138
@@ -136,6 +136,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: e0f70e80cafffb346837d146a69db749, type: 3}
       propertyPath: m_Name
       value: unitlog
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e0f70e80cafffb346837d146a69db749, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0f70e80cafffb346837d146a69db749, type: 3}

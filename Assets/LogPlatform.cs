@@ -22,7 +22,7 @@ public class LogPlatform : MonoBehaviour
 
 
     // Start is called before the first frame update
-    private void Start()
+    private void Awake()
     {
         int randomLength = Random.Range(1, maxSize + 1);
         transform.localScale = new Vector3(1, 1, randomLength);

@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frequency: 5
-  active: 0
+  active: 1
 --- !u!1 &8142207296682351783
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,7 +144,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8142207296799273262}
-  - component: {fileID: 8142207296799273261}
   m_Layer: 0
   m_Name: RiverTrackDouble
   m_TagString: Untagged
@@ -171,26 +170,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8142207296799273261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8142207296799273263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7898464774194b046be4d7517f893597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _spawnPoints:
-  - {fileID: 8142207296682351781}
-  - {fileID: 8142207297768516529}
-  - {fileID: 8142207296447011780}
-  - {fileID: 8142207296749877355}
-  _obstaclePool:
-  - {fileID: 121994793929710636, guid: ca5fe185fa4f2b1468ea3c491279a5e1, type: 3}
-  spawnDeviation: 0.92
 --- !u!1 &8142207297768516531
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,7 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frequency: 2
-  active: 0
+  active: 1
 --- !u!1 &8142207297858541823
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,6 +268,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
