@@ -91,8 +91,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e81e53159ab5e0241b3ace77f15b1fe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  logPrefab: {fileID: 0}
-  maxLogs: 4
+  logPrefab: {fileID: 4766336334352091671, guid: bee17d7f635ad7244ab4c6fc4920ee2e, type: 3}
+  test: {fileID: 0}
+  minLogs: 6
+  maxLogs: 16
   isDoubleLane: 0
 --- !u!1 &7594853750492104400
 GameObject:
@@ -232,7 +234,7 @@ BoxCollider:
   m_GameObject: {fileID: 7594853751396745864}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
