@@ -28,6 +28,8 @@ namespace FG {
 		private Transform _transform;
 		private PlayerStun _playerStun;
 		private PlayerStepCounter _playerStepCounter;
+		private Coroutine _speedUpCoroutine;
+
 
 		// Helpers
 		private bool IsStunned => _playerStun.IsStunned;
@@ -47,6 +49,23 @@ namespace FG {
 			
 			Vector2 inputDirection = value.ReadValue<Vector2>();
 			QueueNewDirection(new Vector3(inputDirection.x, 0, inputDirection.y));
+		}
+
+		public void SpeedUp(float powerUpSpeed, float powerUpDuration) {
+			if (!ReferenceEquals(_speedUpCoroutine, null)) {
+				StopCoroutine(_speedUpCoroutine);
+			}
+
+			_speedUpCoroutine = StartCoroutine(StartSpeedingUp(powerUpSpeed, powerUpDuration));
+		}
+
+		private IEnumerator StartSpeedingUp(float powerUpSpeed, float powerUpDuration) {
+			float originalSpeed = movementSpeed;
+			movementSpeed = powerUpSpeed;
+
+			yield return new WaitForSeconds(powerUpDuration);
+
+			movementSpeed = originalSpeed;
 		}
 
 		/// <summary>

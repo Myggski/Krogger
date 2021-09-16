@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6505290645599127878}
   - component: {fileID: 2167687736209321568}
   - component: {fileID: 6301103571400884506}
+  - component: {fileID: 4520383699394644157}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -250,6 +251,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreToAdd: 1
+--- !u!114 &4520383699394644157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1825621285455089822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 659bbe08703d4b65b5fe761866e5d865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &5149170031889063904
 Animator:
   serializedVersion: 3

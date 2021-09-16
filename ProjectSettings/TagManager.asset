@@ -6,6 +6,7 @@ TagManager:
   tags:
   - car
   - obstacle
+  - power up
   layers:
   - Default
   - TransparentFX

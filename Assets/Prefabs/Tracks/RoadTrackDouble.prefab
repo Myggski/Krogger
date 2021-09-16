@@ -198,6 +198,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2054738136425628731}
   - component: {fileID: 2897093827262989859}
+  - component: {fileID: -9104918227861326345}
   m_Layer: 0
   m_Name: RoadTrackDouble
   m_TagString: Untagged
@@ -241,13 +242,32 @@ MonoBehaviour:
   - {fileID: 8861163607068152583}
   - {fileID: 481955004533875057}
   - {fileID: 1522536738805032354}
-  numberOfActiveSpawns: 2
   spawnDeviation: 1.27
   obstaclePool:
   - {fileID: 4822504028821433057, guid: a68942ddc7f23ab4bba50cb061401317, type: 3}
   - {fileID: 121994793929710636, guid: dea67f6c9f6943c4f8fb26d23f9e2fcd, type: 3}
   - {fileID: 2589367874422316189, guid: 8a0207499a1c1ac46986e6000a94cd9d, type: 3}
   - {fileID: 8394988496418218323, guid: c64f77b76d8105a49a5eb2dde4ce9e59, type: 3}
+  minObstacleSpeed: 400
+  maxObstacleSpeed: 1200
+--- !u!114 &-9104918227861326345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6473116379180799607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e45d606a4edb4b68be2f1c44f81fa887, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minToSpawn: 1
+  maxToSpawn: 1
+  chanceOfSpawning: 0.05
+  gameObjectPlacedPerUnit: 3
+  prefabsToSpawn:
+  - {fileID: 4967781278566433804, guid: 4fb58103e2cc1f74fa934d929444d6e8, type: 3}
 --- !u!1 &7999790315298229768
 GameObject:
   m_ObjectHideFlags: 0

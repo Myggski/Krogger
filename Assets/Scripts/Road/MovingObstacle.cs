@@ -10,7 +10,7 @@ public class MovingObstacle : MonoBehaviour {
     [SerializeField]
     private float stunTime = 0.5f;
     [SerializeField]
-    private float invulnerableTime = 0.5f;
+    private float invulnerableTime = 0.2f;
 
     private float _speed = 5.0f;
     private float _trackWidth = 60f;
