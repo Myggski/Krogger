@@ -1,8 +1,12 @@
 using UnityEngine;
 
-public class SpawnPoint : MonoBehaviour
-{
-    public float frequency = 2f;
+namespace FG {
+    public class SpawnPoint : MonoBehaviour
+    {
+        public float frequency = 3f;
 
-    public bool active;
+        public bool active;
+
+        public SpawnPointPositionType spawnPointPositionType;
+    }
 }

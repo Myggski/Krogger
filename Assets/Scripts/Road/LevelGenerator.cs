@@ -6,30 +6,35 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class LevelGenerator : ManagerBase<LevelGenerator> {
+    [Header("Track settings")]
     [SerializeField]
     private WeightedTrackPiece[] weightedTracks;
     [SerializeField]
     private int maxTrackPieces = 23;
     [SerializeField] 
     private int startingAmountTracks = 20;
+    [SerializeField] 
+    private int numberOfSafeTracks = 10;
     [SerializeField]
     [Tooltip("How close a gameObject (player) has to be to the last piece")]
     private int minSpawnDistance = 30;
-    
-    [Space(10)]
-
+    [Space(16)]
     [SerializeField]
-    private float spawnSpeed = 5f;
-    
-    [Space(10)]
-    
+    [Tooltip("How much time it takes for a new track to spawn")]
+    private float timeBetweenTrackSpawns = 3f;
+    [SerializeField]
+    [Tooltip("How much time to remove whenever the track speeds up")]
+    private float timeBetweenTrackSpeedIncrement = 0.075f;
+    [SerializeField]
+    [Tooltip("Minimal time that the spawning time can get to")]
+    private float minTrackSpeedIncrement = 0.4f;
+    [Space(16)]
     [SerializeField]
     private float shakeSpeed = 1.0f;
     [SerializeField]
     private float shakeAmount  = 1.0f;
 
     private int _sumWeights;
-    private readonly LinkedList<GameObject> _trackQueue = new LinkedList<GameObject>();
     private Vector3 _spawnPosition = new Vector3(0, 0, 0);
     private GameObject _lastTrackPiece;
     private GameObject _currentTrackPiece;
@@ -37,13 +42,13 @@ public class LevelGenerator : ManagerBase<LevelGenerator> {
     private GameObject _sinkingTrackPiece;
     private Coroutine _spawnTrackCoroutine;
     
+    private readonly LinkedList<GameObject> _trackQueue = new LinkedList<GameObject>();
     private const float SINK_SPEED = 0.1f;
 
-    protected override void Awake() {
-        base.Awake();
-
+    private void InitializeLevel() {
         SetupSafeStart();
-
+        
+        // Setting up the weights of the tracks 
         foreach (WeightedTrackPiece track in weightedTracks) {
             _sumWeights += track.Weight;
         }
@@ -75,18 +80,36 @@ public class LevelGenerator : ManagerBase<LevelGenerator> {
         }
     }
 
+    /// <summary>
+    /// Speeds up the time between track spawns
+    /// </summary>
+    public void SpeedUpTrackSpawn() {
+        timeBetweenTrackSpawns -= timeBetweenTrackSpeedIncrement;
+        timeBetweenTrackSpawns = Mathf.Clamp(timeBetweenTrackSpawns, minTrackSpeedIncrement, timeBetweenTrackSpawns);
+    }
+
+    /// <summary>
+    /// Starts coroutine that spawns tracks after a certain amount of time
+    /// </summary>
     private void StartSpawningTracks() {
         if (!ReferenceEquals(_spawnTrackCoroutine, null)) {
             StopCoroutine(_spawnTrackCoroutine);
         }
 
-        _spawnTrackCoroutine = StartCoroutine(SpawnTracks(spawnSpeed));
+        _spawnTrackCoroutine = StartCoroutine(SpawnTracks());
     }
 
     // Initializes _lastTrackPiece and sets up a safe first row
     // _lastTrackPiece is needed for the method SpawnNextTrackPiece()
-    private void SetupSafeStart()
-    {
+    private void SetupSafeStart() {
+        SetupSpawningTrack();
+        SetupSafeTracks();
+    }
+
+    /// <summary>
+    /// Makes the first track safe by removing all the obstacles
+    /// </summary>
+    private void SetupSpawningTrack() {
         _lastTrackPiece = weightedTracks[0].TrackPrefab;
         _currentTrackPiece = Instantiate(_lastTrackPiece, _spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0));
         _trackQueue.AddLast(_currentTrackPiece);
@@ -94,20 +117,32 @@ public class LevelGenerator : ManagerBase<LevelGenerator> {
         
         // Removes component that adds obstacles on the safe spawn point
         ObstacleSpawner obstacleSpawner = _shakeTrackPiece.GetComponent<ObstacleSpawner>();
+        
         if (!ReferenceEquals(obstacleSpawner, null)) {
             Destroy(obstacleSpawner);    
         }
-        
-        // Spawn one additional rows of safe grass
-        SpawnNextTrackPiece(0);
+    }
+
+    /// <summary>
+    /// Setting up a few tracks after the first track that is safer than the upcoming tracks
+    /// </summary>
+    private void SetupSafeTracks() {
+        for (int i = 0; i < numberOfSafeTracks; i++) {
+            GameObject trackPiece = SpawnNextTrackPiece(0);
+            ObstacleSpawner obstacleSpawner = trackPiece.GetComponent<ObstacleSpawner>();
+            
+            if (!ReferenceEquals(obstacleSpawner, null)) {
+                obstacleSpawner.InitializeSafeMode();    
+            }
+        }
     }
 
     // Remove this? Used to infinitely spawn tracks every <frequency> seconds
     // Could be useful later. 
-    private IEnumerator SpawnTracks(float frequency) {
+    private IEnumerator SpawnTracks() {
         while (true) {
             WeightedSpawnNextTrackPiece();
-            yield return new WaitForSeconds(frequency);
+            yield return new WaitForSeconds(timeBetweenTrackSpawns);
         }
     }
 
@@ -135,23 +170,23 @@ public class LevelGenerator : ManagerBase<LevelGenerator> {
     /// Spawns a trackpiece using the supplied prefab
     /// </summary>
     /// <param name="trackPiecePrefab">Roadtrack prefab to be spawned</param>
-    private void SpawnNextTrackPiece(GameObject trackPiecePrefab)
+    private GameObject SpawnNextTrackPiece(GameObject trackPiecePrefab)
     {
         _currentTrackPiece = trackPiecePrefab;
-        SpawnCurrentPiece();
+        return SpawnCurrentPiece();
     }
 
     /// <summary>
     /// Spawns a trackpiece using the supplied track index
     /// </summary>
     /// <param name="trackIndex"></param>
-    private void SpawnNextTrackPiece(int trackIndex)
+    private GameObject SpawnNextTrackPiece(int trackIndex)
     {
         _currentTrackPiece = weightedTracks[trackIndex].TrackPrefab;
-        SpawnCurrentPiece();
+        return SpawnCurrentPiece();
     }
 
-    private void SpawnCurrentPiece()
+    private GameObject SpawnCurrentPiece()
     {
         _spawnPosition += transform.forward *
                           ((_lastTrackPiece.transform.localScale.x / 2) + (_currentTrackPiece.transform.localScale.x / 2));
@@ -170,6 +205,7 @@ public class LevelGenerator : ManagerBase<LevelGenerator> {
         }
 
         _lastTrackPiece = _currentTrackPiece;
+        return _trackQueue.Last();
     }
 
     private IEnumerator DelayedDestroyTrackPiece(GameObject trackPiece, float inSeconds)
@@ -198,23 +234,35 @@ public class LevelGenerator : ManagerBase<LevelGenerator> {
         }
     }
 
-    private void Update()
-    {
+    /// <summary>
+    /// Adds shake animation on the first piece on the track
+    /// </summary>
+    private void ShakeAnimation() {
         if (!ReferenceEquals(_shakeTrackPiece, null)) {
-            var shake =  Mathf.Sin(Time.time * shakeSpeed) * shakeAmount;
-            _shakeTrackPiece.transform.position = new Vector3(_shakeTrackPiece.transform.position.x, shake,
-                _shakeTrackPiece.transform.position.z);
+            Vector3 shakeTrackPosition = _shakeTrackPiece.transform.position;
+            float shake =  Mathf.Sin(Time.time * shakeSpeed) * shakeAmount;
+
+            _shakeTrackPiece.transform.position = 
+                new Vector3(shakeTrackPosition.x, shake, shakeTrackPosition.z);
         }
 
         if (!ReferenceEquals(_sinkingTrackPiece, null)) {
-            
             _sinkingTrackPiece.transform.position += Vector3.down * SINK_SPEED;
         }
     }
+
+    private void Update() {
+        ShakeAnimation();
+    }
+    
+    protected override void Awake() {
+        base.Awake();
+
+        InitializeLevel();
+    }
     
     // Gizmos for helping with how this object is facing
-    private void OnDrawGizmos()
-    {
+    private void OnDrawGizmos() {
         Gizmos.color = Color.blue;
         Vector3 direction = transform.TransformDirection(Vector3.forward) * 20;
         Gizmos.DrawRay(transform.position, direction);

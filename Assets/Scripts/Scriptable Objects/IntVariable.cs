@@ -1,6 +1,8 @@
-namespace FG {
-	using UnityEngine;
+using System;
+using UnityEditor;
+using UnityEngine;
 
+namespace FG {
 	[CreateAssetMenu(menuName = "Variables/IntVariable")]
 	public class IntVariable : ScriptableObject
 	{

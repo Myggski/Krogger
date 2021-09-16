@@ -21,10 +21,8 @@ namespace FG {
 		/// </summary>
 		/// <param name="scoreToAdd"></param>
 		public void AddScore(int scoreToAdd) {
-			if (scoreToAdd > 0) {
-				currentScore.Value += scoreToAdd;
-				playerScored.Invoke();
-			}
+			currentScore.Value += scoreToAdd;
+			playerScored.Invoke();
 		}
 
 		/// <summary>
@@ -33,6 +31,12 @@ namespace FG {
 		/// </summary>
 		public void ResetScore() {
 			currentScore.Value = 0;
+		}
+
+		protected override void Awake() {
+			base.Awake();
+
+			ResetScore();
 		}
 	}
 }

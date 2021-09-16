@@ -1,24 +1,22 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace FG {
+	[RequireComponent(typeof(PlayerStun), typeof(PlayerStepCounter))]
 	public class PlayerController : MonoBehaviour {
 		[Header("Movement")]
 		[SerializeField]
 		private float movementSpeed = 5.0f;
-
 		[SerializeField]
 		private float movementStepsInUnits = 1f;
-
 		[Header("Animation")]
 		[SerializeField] 
 		private string jumpAnimationTriggerName = "Jump";
-
 		[SerializeField]
 		private Animator animator;
-
 		[SerializeField]
 		[Tooltip("The layer where the obstacles are, for optimization.")]
 		private LayerMask obstacleLayerMask = 1 << 6;
@@ -28,8 +26,11 @@ namespace FG {
 		private List<Vector3> _queuedMovements;
 		private Vector3 _currentPosition;
 		private Transform _transform;
+		private PlayerStun _playerStun;
+		private PlayerStepCounter _playerStepCounter;
 
 		// Helpers
+		private bool IsStunned => _playerStun.IsStunned;
 		private bool HasQueuedMovements => _queuedMovements.Any();
 		private bool HasSpotsLeftInMovementQueue => _queuedMovements.Count < 2;
 		private Vector3 NextDirection => HasQueuedMovements ? _queuedMovements[0] : Vector3.zero;
@@ -40,10 +41,12 @@ namespace FG {
 		/// </summary>
 		/// <param name="value">The input value, what button, what state on the button and so on</param>
 		public void OnMovement(InputAction.CallbackContext value) {
-			if (value.phase == InputActionPhase.Started) {
-				Vector2 inputDirection = value.ReadValue<Vector2>();
-				QueueNewDirection(new Vector3(inputDirection.x, 0, inputDirection.y));
+			if (value.phase != InputActionPhase.Started || IsStunned) {
+				return;
 			}
+			
+			Vector2 inputDirection = value.ReadValue<Vector2>();
+			QueueNewDirection(new Vector3(inputDirection.x, 0, inputDirection.y));
 		}
 
 		/// <summary>
@@ -123,6 +126,7 @@ namespace FG {
 			// Player has reached the new position 
 			if (_transform.position == NextDirection) {
 				LevelGenerator.Instance.TrySpawnTrack(_currentPosition);
+				_playerStepCounter.UpdatePosition(_transform.position.z);
 				ResetMovementInfo();
 			}
 		}
@@ -132,6 +136,8 @@ namespace FG {
 		/// </summary>
 		private void Setup() {
 			_queuedMovements = new List<Vector3>();
+			_playerStun = GetComponent<PlayerStun>();
+			_playerStepCounter = GetComponent<PlayerStepCounter>();
 			_transform = transform;
 			_currentPosition = _transform.position;
 		}
@@ -140,9 +146,11 @@ namespace FG {
 		/// Move and rotate Krister if there's any queued movements
 		/// </summary>
 		private void CheckForMovement() {
-			if (HasQueuedMovements) {
+			if (HasQueuedMovements && !IsStunned) {
 				MoveAndRotate();
 			}
+			
+			animator.enabled = !IsStunned;
 		}
 		
 		private void Awake() {
