@@ -198,6 +198,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3540141186023594163, guid: 5b3fa3eb67a7fa942a4c0c8d8de52ee3, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: f1735f19a2114eb4892dafaf7ea3c784, type: 2}
     - target: {fileID: 7170354421619888233, guid: 5b3fa3eb67a7fa942a4c0c8d8de52ee3, type: 3}
       propertyPath: m_Name
       value: GameOverMenu

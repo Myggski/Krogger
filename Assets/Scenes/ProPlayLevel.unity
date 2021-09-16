@@ -411,6 +411,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScoreDisplay
       objectReference: {fileID: 0}
+    - target: {fileID: 4933039481419500743, guid: 44232fdec5e949342a77e35ae04d3476, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: f1735f19a2114eb4892dafaf7ea3c784, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 44232fdec5e949342a77e35ae04d3476, type: 3}
 --- !u!1001 &1899741271
