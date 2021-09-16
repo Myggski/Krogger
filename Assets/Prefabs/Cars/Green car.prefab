@@ -187,7 +187,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 4
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &-5726516001471039382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,8 +200,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ee22c14ffe7e7946948c91ec716f066, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 437
   explosion: {fileID: 4401027953183480350, guid: 821586343bfaf5b4a8ec782cc9b6a0c3, type: 3}
+  playerStunned:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -8810030872996408450, guid: d7c5d2c0d45881144a0dc901a19bb0fb, type: 3}
+        m_TargetAssemblyTypeName: FG.ScreenShake, UI Assembly
+        m_MethodName: StartShake
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!64 &-3228931800482429277
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -209,7 +223,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2589367874422316189}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: dbaa2e7739c8ba94eb46f94b7ad26763, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4

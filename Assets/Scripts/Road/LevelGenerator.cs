@@ -20,7 +20,14 @@ public class LevelGenerator : ManagerBase<LevelGenerator> {
     private int minSpawnDistance = 30;
     [Space(16)]
     [SerializeField]
-    private float spawnSpeed = 5f;
+    [Tooltip("How much time it takes for a new track to spawn")]
+    private float timeBetweenTrackSpawns = 3f;
+    [SerializeField]
+    [Tooltip("How much time to remove whenever the track speeds up")]
+    private float timeBetweenTrackSpeedIncrement = 0.075f;
+    [SerializeField]
+    [Tooltip("Minimal time that the spawning time can get to")]
+    private float minTrackSpeedIncrement = 0.4f;
     [Space(16)]
     [SerializeField]
     private float shakeSpeed = 1.0f;
@@ -74,6 +81,14 @@ public class LevelGenerator : ManagerBase<LevelGenerator> {
     }
 
     /// <summary>
+    /// Speeds up the time between track spawns
+    /// </summary>
+    public void SpeedUpTrackSpawn() {
+        timeBetweenTrackSpawns -= timeBetweenTrackSpeedIncrement;
+        timeBetweenTrackSpawns = Mathf.Clamp(timeBetweenTrackSpawns, minTrackSpeedIncrement, timeBetweenTrackSpawns);
+    }
+
+    /// <summary>
     /// Starts coroutine that spawns tracks after a certain amount of time
     /// </summary>
     private void StartSpawningTracks() {
@@ -81,7 +96,7 @@ public class LevelGenerator : ManagerBase<LevelGenerator> {
             StopCoroutine(_spawnTrackCoroutine);
         }
 
-        _spawnTrackCoroutine = StartCoroutine(SpawnTracks(spawnSpeed));
+        _spawnTrackCoroutine = StartCoroutine(SpawnTracks());
     }
 
     // Initializes _lastTrackPiece and sets up a safe first row
@@ -124,10 +139,10 @@ public class LevelGenerator : ManagerBase<LevelGenerator> {
 
     // Remove this? Used to infinitely spawn tracks every <frequency> seconds
     // Could be useful later. 
-    private IEnumerator SpawnTracks(float frequency) {
+    private IEnumerator SpawnTracks() {
         while (true) {
             WeightedSpawnNextTrackPiece();
-            yield return new WaitForSeconds(frequency);
+            yield return new WaitForSeconds(timeBetweenTrackSpawns);
         }
     }
 

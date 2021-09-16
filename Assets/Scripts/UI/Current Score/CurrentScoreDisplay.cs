@@ -24,19 +24,27 @@ namespace FG.CurrentScore {
 
         private UIDocument _document;
         private Label _scoreText;
-        private bool _playingAnimation = false;
-        
+        private Coroutine _animationCoroutine;
+
         /// <summary>
-        /// Updates the score-text in the UI
+        /// Updates the score-text in the UI and then animating it
         /// This method will be called by an UnityEvent.
         /// </summary>
         public void UpdateScoreText() {
-            _scoreText.text = $"{currentScore}";
+            SetScore();
 
-            if (!_playingAnimation) {
-                _playingAnimation = true;
-                StartCoroutine(AnimateTextSize());
+            if (!ReferenceEquals(_animationCoroutine, null)) {
+                StopCoroutine(_animationCoroutine);
             }
+            
+            _animationCoroutine = StartCoroutine(AnimateTextSize());
+        }
+
+        /// <summary>
+        /// Updates the score-text in the UI
+        /// </summary>
+        private void SetScore() {
+            _scoreText.text = $"{currentScore.Value}";
         }
 
         /// <summary>
@@ -67,7 +75,6 @@ namespace FG.CurrentScore {
             }
             
             _scoreText.style.fontSize = fontSize;
-            _playingAnimation = false;
         }
 
         /// <summary>
@@ -82,6 +89,7 @@ namespace FG.CurrentScore {
         /// </summary>
         private void InitializeElement() {
             _scoreText = _document.rootVisualElement.Q<Label>("score-text");
+            SetScore();
         }
 
         private void Awake() {
@@ -90,7 +98,6 @@ namespace FG.CurrentScore {
 
         private void OnEnable() {
             InitializeElement();
-            StartCoroutine(AnimateTextSize());
         }
     }
 }

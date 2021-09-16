@@ -22,7 +22,7 @@ public class CameraBillboard : MonoBehaviour {
     }
 
     // Update is called once per frame
-    private void LateUpdate()
+    private void Update()
     {
         if (enableBillboard)
         {
