@@ -12,8 +12,12 @@ public class LogPlatformSpawner : MonoBehaviour
 
     [SerializeField]
     private GameObject test;
+
+    [SerializeField] 
+    private int minLogs = 6;
     
     [Tooltip("Max logs to be spawned")]
+    [Range(6, 16)]
     [SerializeField] 
     private int maxLogs = 4;
 
@@ -40,7 +44,8 @@ public class LogPlatformSpawner : MonoBehaviour
 
     private void SpawnLogs()
     {
-        for (int i = 0; i < maxLogs; i++)
+        int logsToPlace = Random.Range(minLogs, maxLogs + 1);
+        for (int i = 0; i < logsToPlace; i++)
         {
             PlaceLog();
         }
@@ -49,19 +54,23 @@ public class LogPlatformSpawner : MonoBehaviour
     private void PlaceLog()
     {
         var log = Instantiate(logPrefab, Vector3.one, transform.rotation);
+        log.GetComponent<LogShuffler>().DIR = Random.Range(0, 2) * 2 - 1;
         log.transform.position = GetLogPosition(log, 0); 
 
     }
 
     private Vector3 GetLogPosition(GameObject log, int count)
     {
-        int maxPos = Mathf.RoundToInt((_trackTransform.localScale.z / 2f) - (log.transform.localScale.z * UNIT_SIZE_PER_LOG)/2);
+        int maxPos = Mathf.RoundToInt((_trackTransform.localScale.z / 2f) - UNIT_SIZE_PER_LOG/2);
         int randomXPos = Random.Range(-maxPos, maxPos);
+        int roundedXPos = Mathf.RoundToInt(randomXPos / 3) * 3;
         Vector3 trackPosition = _trackTransform.position;
         
-        Vector3 positionCandidate = new Vector3(randomXPos, trackPosition.y, trackPosition.z);
+        Vector3 positionCandidate = new Vector3(roundedXPos, trackPosition.y, trackPosition.z);
 
-        if (ValidLogSpawnPosition(log, positionCandidate))
+        return positionCandidate;
+
+        /*if (ValidLogSpawnPosition(log, positionCandidate))
         {
             return positionCandidate;
         }
@@ -73,7 +82,7 @@ public class LogPlatformSpawner : MonoBehaviour
             count = 0;
         }
 
-        return GetLogPosition(log, count++);
+        return GetLogPosition(log, count++);*/
     }
 
     private bool ValidLogSpawnPosition(GameObject log, Vector3 position)
