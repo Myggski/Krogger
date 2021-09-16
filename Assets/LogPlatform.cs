@@ -6,10 +6,10 @@ using Random = UnityEngine.Random;
 
 public class LogPlatform : MonoBehaviour
 {
-    [Tooltip("The minimum z-scale a log can spawn with on initialization")]
-    [Range(0.2f, 1f)]
+    [Tooltip("The max z-scale a log can spawn with on initialization")]
+    [Range(1, 6)]
     [SerializeField]
-    private float minimumSize;
+    private int maxSize;
     [SerializeField] 
     private float shakeSpeed;
     [SerializeField] 
@@ -24,21 +24,22 @@ public class LogPlatform : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        float randomLength = Random.Range(minimumSize, 1f);
+        int randomLength = Random.Range(1, maxSize + 1);
         transform.localScale = new Vector3(1, 1, randomLength);
     }
 
+    // Start the sinking timer 
     private void OnTriggerEnter(Collider other)
     {
         // This collision / trigger means player is on a log object
-        if (other.CompareTag("Player"))
-        {
-            // Set isStoodUpon to true, which triggers the shaking
-            isStoodUpon = true;
-            StartSinkCountdown(stayAfloatDuration);
-        }
+        if (!other.CompareTag("Player") || isStoodUpon) return;
+        // Set isStoodUpon to true, which triggers the shaking
+        isStoodUpon = true;
+        StartSinkCountdown(stayAfloatDuration);
     }
 
+    // Stop the sinking timer when player leaves the log,
+    // and stop shaking the log
     private void OnTriggerExit(Collider other)
     {
         isStoodUpon = false;
@@ -58,23 +59,22 @@ public class LogPlatform : MonoBehaviour
     {
         // First wait inSeconds
         yield return new WaitForSeconds(inSeconds);
+        
         // Then set sink flag
         sink = true;
-        Destroy(this, 5f);
+        Destroy(this, 3f);
     }
 
     private void Update()
     {
-        if (isStoodUpon)
-        {
-            var shake =  Mathf.Sin(Time.time * shakeSpeed) * shakeAmount;
-            transform.position = new Vector3(transform.position.x, shake,
-                transform.position.z);
-        }
-
         if (sink)
         {
-            transform.position += Vector3.down * SINK_SPEED;
+            transform.position += Vector3.down * SINK_SPEED * Time.deltaTime;
+        } else if (isStoodUpon)
+        {
+            float shake =  Mathf.Sin(Time.time * shakeSpeed) * shakeAmount;
+            transform.position = new Vector3(transform.position.x, shake,
+                transform.position.z);
         }
     }
 }

@@ -122,7 +122,7 @@ namespace FG {
 
 			// Player has reached the new position 
 			if (_transform.position == NextDirection) {
-				LevelGenerator.Instance.TrySpawnTrack(_currentPosition);
+				//LevelGenerator.Instance.TrySpawnTrack(_currentPosition);
 				ResetMovementInfo();
 			}
 		}

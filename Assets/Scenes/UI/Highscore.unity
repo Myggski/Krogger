@@ -210,6 +210,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuScene: MenuScene
-  apiUrl: http://localhost:1337/api/user
+  apiUrl: https://kristerlovespepsi.loca.lt/api/user
   loadingMessage: LOADING HIGH SCORES...
-  internalServerErrorMEssage: Server is down :(
+  internalServerErrorMessage: Server is down :(
