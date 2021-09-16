@@ -33,6 +33,7 @@ namespace FG {
 
 		// Helpers
 		private bool IsStunned => _playerStun.IsStunned;
+		private bool IsFalling => _transform.position.y < 0f;
 		private bool HasQueuedMovements => _queuedMovements.Any();
 		private bool HasSpotsLeftInMovementQueue => _queuedMovements.Count < 2;
 		private Vector3 NextDirection => HasQueuedMovements ? _queuedMovements[0] : Vector3.zero;
@@ -43,7 +44,7 @@ namespace FG {
 		/// </summary>
 		/// <param name="value">The input value, what button, what state on the button and so on</param>
 		public void OnMovement(InputAction.CallbackContext value) {
-			if (value.phase != InputActionPhase.Started || IsStunned) {
+			if (value.phase != InputActionPhase.Started || IsStunned || IsFalling) {
 				return;
 			}
 			
