@@ -51,6 +51,11 @@ namespace FG {
 			QueueNewDirection(new Vector3(inputDirection.x, 0, inputDirection.y));
 		}
 
+		/// <summary>
+		/// Speed up the player movement in a short amount of time
+		/// </summary>
+		/// <param name="powerUpSpeed">How fast the player becomes</param>
+		/// <param name="powerUpDuration">How long the player has the new speed</param>
 		public void SpeedUp(float powerUpSpeed, float powerUpDuration) {
 			if (!ReferenceEquals(_speedUpCoroutine, null)) {
 				StopCoroutine(_speedUpCoroutine);
@@ -59,6 +64,12 @@ namespace FG {
 			_speedUpCoroutine = StartCoroutine(StartSpeedingUp(powerUpSpeed, powerUpDuration));
 		}
 
+		/// <summary>
+		/// Coroutine that changes speed and then switches back to the original speed
+		/// </summary>
+		/// <param name="powerUpSpeed">How fast the player becomes</param>
+		/// <param name="powerUpDuration">How long the player has the new speed</param>
+		/// <returns></returns>
 		private IEnumerator StartSpeedingUp(float powerUpSpeed, float powerUpDuration) {
 			float originalSpeed = movementSpeed;
 			movementSpeed = powerUpSpeed;
