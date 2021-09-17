@@ -142,7 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameScene: ProPlayLevel
   menuScene: InitialScene
-  apiUrl: https://kristerlovespepsi.loca.lt/api/user
+  apiUrl: https://kristerlovespepsi1.loca.lt/api/user
   successMessage: Score Saved!
   loadingMessage: Loading
   internalServerErrorMessage: Server is down :(
