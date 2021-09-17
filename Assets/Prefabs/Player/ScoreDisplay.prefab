@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21c074d86024caca2a0034ce4f53f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PanelSettings: {fileID: 11400000, guid: 8487063cb888a1443b70b452e97d47a6, type: 2}
+  m_PanelSettings: {fileID: 11400000, guid: 5604133f18036224b844e7e3c2198bc5, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: 40f6f6847d5429f42abaa5beb46cd8a9, type: 3}
   m_SortingOrder: 0

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 782f629a2df6243629ea8fe2873666a4, type: 3}
-  m_Name: Default
+  m_Name: DefaultPanel
   m_EditorClassIdentifier: 
   themeUss: {fileID: -4733365628477956816, guid: a0524a1fa63f9864baa036bbc1f1ffa8, type: 3}
   m_TargetTexture: {fileID: 0}
