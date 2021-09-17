@@ -1,6 +1,8 @@
-# Krogger - Crossy road / Frogger clone
-This project was made for the **Game programming with C#** class at **FutureGames**
+# Krogger
+This is a Crossy road / Frogger clone that was made for the course **Game programming with C#** at [**FutureGames**](http://futuregames.se/).
 
-It has it's own API to save highscore with the help of an external [API](https://github.com/Myggski/krogger-highscore-api) that uses Firebase.
+## API
+Krogger uses a custom made API made in NodeJS to store high scores in Firebase. 
+You can find the API project [here](https://github.com/Myggski/krogger-highscore-api).
 
-The project was made in Unity by Tomas Wallin ([@myggski](https://github.com/Myggski)) and Daniel Khodarahmi ([@harofax](https://github.com/harofax))
+The project was made in Unity by Tomas Wallin ([@myggski](https://github.com/Myggski)) and Daniel Khodarahmi ([@harofax](https://github.com/harofax)).
