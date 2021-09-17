@@ -48,6 +48,15 @@ namespace FG {
 		private void LoadScene(string scene) {
 			SceneManager.LoadScene(scene);
 		}
+		
+		/// <summary>
+		/// Has to remove the MenuManager if we load the menu scene again
+		/// </summary>
+		/// <param name="scene">Probably menu scene</param>
+		private void LoadMenuScene(string scene) {
+			Destroy(MenuManager.Instance);
+			LoadScene(scene);
+		}
 
 		/// <summary>
 		/// Sets the success/error-message in the UI
@@ -148,7 +157,7 @@ namespace FG {
 			// Don't need to wait (await) for SubmitHighScore
 			_submitButton.On<ClickEvent>(ev => SubmitHighScore());
 			_playAgainButton.On<ClickEvent>(ev => LoadScene(gameScene));
-			_backToTheMenuButton.On<ClickEvent>(ev => LoadScene(menuScene));
+			_backToTheMenuButton.On<ClickEvent>(ev => LoadMenuScene(menuScene));
 			_quitButton.On<ClickEvent>(ev => QuitApplication());
 			_nameInput.RegisterCallback<InputEvent>(ValidateInput);
 			
@@ -161,7 +170,7 @@ namespace FG {
 		protected override void RemoveClickEvents() {
 			_submitButton.UnregisterCallback<ClickEvent>(ev => SubmitHighScore());
 			_playAgainButton.UnregisterCallback<ClickEvent>(ev => LoadScene(gameScene));
-			_backToTheMenuButton.UnregisterCallback<ClickEvent>(ev => LoadScene(menuScene));
+			_backToTheMenuButton.UnregisterCallback<ClickEvent>(ev => LoadMenuScene(menuScene));
 			_quitButton.UnregisterCallback<ClickEvent>(ev => QuitApplication());
 			_nameInput.UnregisterCallback<InputEvent>(ValidateInput);
 		}

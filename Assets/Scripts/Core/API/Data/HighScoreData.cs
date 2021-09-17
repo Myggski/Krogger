@@ -1,5 +1,4 @@
-using System.Text.RegularExpressions;
-using Unity.Plastic.Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace FG {
 	/// <summary>

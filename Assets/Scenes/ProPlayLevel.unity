@@ -411,6 +411,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScoreDisplay
       objectReference: {fileID: 0}
+    - target: {fileID: 4933039481419500743, guid: 44232fdec5e949342a77e35ae04d3476, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: f1735f19a2114eb4892dafaf7ea3c784, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 44232fdec5e949342a77e35ae04d3476, type: 3}
 --- !u!1001 &1899741271
@@ -575,11 +579,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5693934255229267454, guid: d7c5d2c0d45881144a0dc901a19bb0fb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 29.599792
+      value: 29
       objectReference: {fileID: 0}
     - target: {fileID: 5693934255229267454, guid: d7c5d2c0d45881144a0dc901a19bb0fb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11.33
+      value: -11
       objectReference: {fileID: 0}
     - target: {fileID: 5693934255229267454, guid: d7c5d2c0d45881144a0dc901a19bb0fb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -608,6 +612,10 @@ PrefabInstance:
     - target: {fileID: 5693934255229267454, guid: d7c5d2c0d45881144a0dc901a19bb0fb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5693934255229267455, guid: d7c5d2c0d45881144a0dc901a19bb0fb, type: 3}
+      propertyPath: followSpeed
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7c5d2c0d45881144a0dc901a19bb0fb, type: 3}

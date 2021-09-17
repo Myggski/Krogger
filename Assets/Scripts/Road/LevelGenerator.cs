@@ -10,6 +10,8 @@ public class LevelGenerator : ManagerBase<LevelGenerator> {
     [SerializeField]
     private WeightedTrackPiece[] weightedTracks;
     [SerializeField]
+    private GameObject powerUpPrefab;
+    [SerializeField]
     private int maxTrackPieces = 23;
     [SerializeField] 
     private int startingAmountTracks = 20;

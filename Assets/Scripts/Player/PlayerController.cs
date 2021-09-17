@@ -28,9 +28,12 @@ namespace FG {
 		private Transform _transform;
 		private PlayerStun _playerStun;
 		private PlayerStepCounter _playerStepCounter;
+		private Coroutine _speedUpCoroutine;
+
 
 		// Helpers
 		private bool IsStunned => _playerStun.IsStunned;
+		private bool IsFalling => _transform.position.y < 0f;
 		private bool HasQueuedMovements => _queuedMovements.Any();
 		private bool HasSpotsLeftInMovementQueue => _queuedMovements.Count < 2;
 		private Vector3 NextDirection => HasQueuedMovements ? _queuedMovements[0] : Vector3.zero;
@@ -41,12 +44,40 @@ namespace FG {
 		/// </summary>
 		/// <param name="value">The input value, what button, what state on the button and so on</param>
 		public void OnMovement(InputAction.CallbackContext value) {
-			if (value.phase != InputActionPhase.Started || IsStunned) {
+			if (value.phase != InputActionPhase.Started || IsStunned || IsFalling) {
 				return;
 			}
 			
 			Vector2 inputDirection = value.ReadValue<Vector2>();
 			QueueNewDirection(new Vector3(inputDirection.x, 0, inputDirection.y));
+		}
+
+		/// <summary>
+		/// Speed up the player movement in a short amount of time
+		/// </summary>
+		/// <param name="powerUpSpeed">How fast the player becomes</param>
+		/// <param name="powerUpDuration">How long the player has the new speed</param>
+		public void SpeedUp(float powerUpSpeed, float powerUpDuration) {
+			if (!ReferenceEquals(_speedUpCoroutine, null)) {
+				StopCoroutine(_speedUpCoroutine);
+			}
+
+			_speedUpCoroutine = StartCoroutine(StartSpeedingUp(powerUpSpeed, powerUpDuration));
+		}
+
+		/// <summary>
+		/// Coroutine that changes speed and then switches back to the original speed
+		/// </summary>
+		/// <param name="powerUpSpeed">How fast the player becomes</param>
+		/// <param name="powerUpDuration">How long the player has the new speed</param>
+		/// <returns></returns>
+		private IEnumerator StartSpeedingUp(float powerUpSpeed, float powerUpDuration) {
+			float originalSpeed = movementSpeed;
+			movementSpeed = powerUpSpeed;
+
+			yield return new WaitForSeconds(powerUpDuration);
+
+			movementSpeed = originalSpeed;
 		}
 
 		/// <summary>

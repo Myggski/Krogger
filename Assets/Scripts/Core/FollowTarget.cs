@@ -4,24 +4,29 @@ using UnityEngine;
 
 public class FollowTarget : MonoBehaviour {
     [SerializeField]
-    private float followSpeed = 2f;
+    private float followSpeed = 0f;
 
     private Transform _target;
     private Vector3 _targetOffset;
 
     // Start is called before the first frame update
-    private void Start() {
-        Invoke(nameof(LateStart), 1f);
+    private void Awake() {
+        StartCoroutine(Setup());
     }
 
-    private void LateStart() {
+    private IEnumerator Setup() {
+
+        while (ReferenceEquals(GameObject.FindWithTag("Player"), null)) {
+            yield return new WaitForEndOfFrame();
+        }
+        
         _target = GameObject.FindWithTag("Player").transform;
         _targetOffset = transform.position - _target.position;
     }
 
     // Update is called once per frame
     private void Update() {
-        if (_target) {
+        if (_target && _target.position.y >= 0) {
             transform.position = Vector3.Lerp(transform.position, _target.position + _targetOffset,
                 followSpeed * Time.deltaTime);
         }

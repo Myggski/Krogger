@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level UI
       objectReference: {fileID: 0}
+    - target: {fileID: 4393539125293431374, guid: 4ed935e00ea2ad44a9b452341b757d24, type: 3}
+      propertyPath: gameScene
+      value: ProPlayLevel
+      objectReference: {fileID: 0}
     - target: {fileID: 6923304224336994109, guid: 4ed935e00ea2ad44a9b452341b757d24, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -178,5 +182,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7067049602124621813, guid: 4ed935e00ea2ad44a9b452341b757d24, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: f1735f19a2114eb4892dafaf7ea3c784, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ed935e00ea2ad44a9b452341b757d24, type: 3}
